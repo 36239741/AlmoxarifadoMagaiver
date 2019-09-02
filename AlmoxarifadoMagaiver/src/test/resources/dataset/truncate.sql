@@ -1,2 +1,2 @@
 
-TRUNCATE tbl_telefone CASCADE;
+TRUNCATE tbl_fornecedor CASCADE;

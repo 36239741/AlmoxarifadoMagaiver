@@ -7,6 +7,7 @@ import com.br.almoxarifado.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+	
 	User findByEmailContaining (String email);
 	
 }

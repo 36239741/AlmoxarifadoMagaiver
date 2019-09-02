@@ -11,27 +11,41 @@ import org.springframework.stereotype.Service;
 
 import com.br.almoxarifado.entity.User;
 import com.br.almoxarifado.repository.UserRepository;
+
 @Service
 @Transactional
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository repository;
 
-	
-	public User createOrUpdate(User user) {
+	public User insertUser(User user) {
+		String filterEmail = null;
 		User findByEmail = null;
-		findByEmail = this.findByemail(user.getEmail());
-			if(findByEmail == null) {
-				this.repository.save(user);
-			}
-	return user;
-		
+		User userPersist = null;
+		filterEmail = user.getEmail();
+		findByEmail = this.findByemail(filterEmail);
+		if (findByEmail == null) {
+			user.setEmail(filterEmail);
+			userPersist =  this.repository.save(user);
+		}
+	return userPersist;
 	}
 
-	
+	public User updateUser(User user) {
+		String filterEmail = null;
+		User findByEmail = null;
+		User userPersist = null;
+		filterEmail = this.filter(user.getEmail());
+		findByEmail = this.findByemail(filterEmail);
+		if (findByEmail != null) {
+			userPersist=this.repository.save(user);
+		}
+		return userPersist;
+	}
+
 	public Optional<User> findById(Long id) {
-		Optional<User> findById =null;
+		Optional<User> findById = null;
 		try {
 			findById = this.repository.findById(id);
 		} catch (Exception e) {
@@ -40,31 +54,34 @@ public class UserService {
 		return findById;
 	}
 
-	
+	public String filter(String email) {
+		email.toLowerCase();
+
+		return email;
+	}
+
 	public void delete(Long id) {
 		Optional<User> findById = null;
 		findById = findById(id);
-		if(findById != null) {
+		if (findById != null) {
 			this.repository.deleteById(id);
 		}
-		
+
 	}
 
-	
 	public Page<User> findAll(int page, int count) {
 		PageRequest pages = PageRequest.of(page, count);
 		return this.repository.findAll(pages);
 	}
 
-	
 	public User findByemail(String email) {
 		User findByEmail = null;
 		try {
 			findByEmail = this.repository.findByEmailContaining(email);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.getMessage();
 		}
-	return findByEmail;
+		return findByEmail;
 	}
 
 }

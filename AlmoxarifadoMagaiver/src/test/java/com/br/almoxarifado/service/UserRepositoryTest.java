@@ -38,7 +38,7 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 		user.setEmail("joao@hotmail.com");
 		user.setNome("joao");
 		user.setSenha("joao123");
-		this.service.createOrUpdate(user);
+		this.service.insertUser(user);
 		Assert.assertNotNull(user);
 	}
 	@Test
@@ -50,7 +50,7 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 		User user = new User();
 		user = this.service.findByemail("henrique_nitatori@hotmail.com");
 		user.setEmail("Ricar@hotmail.com");
-		this.service.createOrUpdate(user);
+		this.service.updateUser(user);
 		Assert.assertEquals(user.getEmail(),"Ricar@hotmail.com");
 	}
 	@Sql({
@@ -85,6 +85,6 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 		user.setEmail("henrique_nitatori@hotmail.com");
 		user.setNome("joao");
 		user.setSenha("nitatori");
-		this.service.createOrUpdate(user);
+		this.service.insertUser(user);
 	}
 }

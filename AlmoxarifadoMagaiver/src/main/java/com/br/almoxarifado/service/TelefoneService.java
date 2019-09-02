@@ -22,5 +22,10 @@ public class TelefoneService   {
 			}
 		return telefone;
 	}
+	public Telefone findTelefoneByIdFornecedor(Long fornecedorId, Integer tipoTelefone) {
+		Telefone findTelefone = null;
+			findTelefone = this.repositoy.findTelefoneByIdFornecedor(fornecedorId, tipoTelefone);
+		return findTelefone;
+	}
 	
 }

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
@@ -29,7 +30,7 @@ import lombok.ToString;
 public class Fornecedores implements Serializable {
 	private static final long serialVersionUID = 1;
 	@Id()
-	@GeneratedValue()
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "fornecedor_id")
 	private Long id;
 	
@@ -41,7 +42,7 @@ public class Fornecedores implements Serializable {
 	@NotNull(message = "Nenhum E-mail inserido")
 	private String email;
 	
-	@OneToMany(mappedBy = "fornecedor",targetEntity = Telefone.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true )
+	@OneToMany(mappedBy = "fornecedor", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true )
 	private Set<Telefone> telefone;
 	
 	@Size(max = 15,message = "Nome inserido excede o tamanho do campo")
