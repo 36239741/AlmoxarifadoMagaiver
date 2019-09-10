@@ -45,8 +45,9 @@ public class User implements Serializable {
 	@NotNull(message = "Informe um valor")
 	@Size(max = 20) 
 	private String senha;
-	
+	@Column(name = "status_conta")
 	private boolean statusConta = false;
+	@Column(name = "status_user")
 	private boolean statusUser = true;
 	private UserRolesEnums userRoles = UserRolesEnums.GUEST;
 	

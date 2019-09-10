@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.User;
 import com.br.almoxarifado.repository.UserRepository;
 
@@ -18,7 +19,8 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repository;
-
+	
+	//Insere um user verificando se ja tem um email cadastrado
 	public User insertUser(User user) {
 		String filterEmail = null;
 		User findByEmail = null;
@@ -31,19 +33,17 @@ public class UserService {
 		}
 	return userPersist;
 	}
-
+	//Edita um item somente se encontra o usuario por email no banco
 	public User updateUser(User user) {
-		String filterEmail = null;
 		User findByEmail = null;
 		User userPersist = null;
-		filterEmail = this.filter(user.getEmail());
-		findByEmail = this.findByemail(filterEmail);
+		findByEmail = this.findByemail(user.getEmail());
 		if (findByEmail != null) {
 			userPersist=this.repository.save(user);
 		}
 		return userPersist;
 	}
-
+	//busca um usuario pelo id
 	public Optional<User> findById(Long id) {
 		Optional<User> findById = null;
 		try {
@@ -54,34 +54,34 @@ public class UserService {
 		return findById;
 	}
 
-	public String filter(String email) {
-		email.toLowerCase();
 
-		return email;
-	}
-
-	public void delete(Long id) {
-		Optional<User> findById = null;
-		findById = findById(id);
-		if (findById != null) {
-			this.repository.deleteById(id);
-		}
-
-	}
-
+	//Retorna todos usuarios
 	public Page<User> findAll(int page, int count) {
 		PageRequest pages = PageRequest.of(page, count);
 		return this.repository.findAll(pages);
 	}
-
+	//Busca pelo email do usuario
 	public User findByemail(String email) {
 		User findByEmail = null;
 		try {
-			findByEmail = this.repository.findByEmailContaining(email);
+			findByEmail = this.repository.findByEmail(email);
 		} catch (Exception e) {
 			e.getMessage();
 		}
 		return findByEmail;
+	}
+	//Ativa o usuario se tiver desativado e vice e versa
+	public void activeOrDesative(String email) {
+		User userFindByEmail = null;
+		userFindByEmail = this.repository.findByEmail(email);
+		if(userFindByEmail != null) {
+			if(userFindByEmail.isStatusUser() == true) {
+				this.repository.userDesative(userFindByEmail.getId());
+			}
+			else {
+				this.repository.userDesative(userFindByEmail.getId());
+			}
+		}
 	}
 
 }

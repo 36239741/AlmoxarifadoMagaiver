@@ -61,6 +61,10 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 		Assert.assertNotNull(page);
 	}
 	@Test
+	public void fornecedorAtive() {
+		this.service.desativarOrAtivarFornecedor("MARTELOSA");
+	}
+	@Test
 	public void findNameMustPass() {
 		Fornecedores forn = null;
 		forn = this.service.findByNomeFornecedor("martelo sa");

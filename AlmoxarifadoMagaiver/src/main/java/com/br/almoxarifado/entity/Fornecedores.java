@@ -58,4 +58,6 @@ public class Fornecedores implements Serializable {
 	private String estado;
 	@Size(max =2 , message = "Nome inserido excede o tamanho do campo")
 	private String pais;
+	@Column(name = "fornecedores_status")
+	private Boolean fornecedoresStatus = true;
 }

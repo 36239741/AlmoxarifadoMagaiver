@@ -38,6 +38,7 @@ public class FornecedoresService {
 	return fornecedoresPersist;
 		
 	}
+	//Edita o fornecedor somente se achar ele no banco
 	public Fornecedores updateFornecedores(Fornecedores fornecedores) {
 	String filterFornecedorName = null;
 	Fornecedores fornecedoresPersist = null;
@@ -60,11 +61,8 @@ public class FornecedoresService {
 	//Filtra o nome do fornecedor retira os espacos e deixar maiusculo
 	public String filterNameFornecedor(String getname){
 		String filterSpace = null;
-		String filterUpperCase = null;
-			filterSpace = getname.replace(" ", "");
-				filterUpperCase = filterSpace.toUpperCase();
-		
-		return filterUpperCase;
+			filterSpace = getname.replace(" ", "");	
+		return filterSpace;
 	}
 	//Busca pelo nome do fornecedor
 	public Fornecedores findByNomeFornecedor(String name) {
@@ -74,6 +72,22 @@ public class FornecedoresService {
 				fornecedores = this.repository.findByNomeContaining(nameFilter);
 				
 		return fornecedores;
+	}
+	//Se o campo fornecedor_status estiver true ele muda para false e vice-versa
+	public void desativarOrAtivarFornecedor(String name) {
+		Fornecedores fornecedores = null;
+		fornecedores = this.findByNomeFornecedor(name);
+		if(fornecedores != null) {
+			
+		
+		if(fornecedores.getFornecedoresStatus() == true) {
+			this.repository.fornecedorDesative(fornecedores.getId());
+			
+		}
+		else {
+			this.repository.fornecedorActive(fornecedores.getId());
+		}
+	}
 	}
 	
 
