@@ -26,7 +26,7 @@ public class UserService {
 	private EmailService emailService;
 	@Autowired
 	private TokenService tokenService;
-	@Autowired
+
 	private GeradorSenhaService geradorSenha;
 
 	// Insere um user verificando se ja tem um email cadastrado

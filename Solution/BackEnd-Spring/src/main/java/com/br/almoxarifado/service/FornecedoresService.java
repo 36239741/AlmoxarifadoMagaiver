@@ -1,7 +1,6 @@
 package com.br.almoxarifado.service;
 
-import java.util.Set;
-
+import javax.persistence.RollbackException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.br.almoxarifado.entity.Fornecedores;
-import com.br.almoxarifado.entity.Telefone;
+import com.br.almoxarifado.error.ResourceNotFoundException;
 import com.br.almoxarifado.repository.FornecedorRepository;
 
 @Service
@@ -18,23 +17,18 @@ import com.br.almoxarifado.repository.FornecedorRepository;
 public class FornecedoresService {
 	@Autowired
 	FornecedorRepository repository;
-	@Autowired
-	TelefoneService telService;
 
 	// Isere somente se nao existir o mesmo nome cadastrado
-	public Fornecedores insertFornecedores(Fornecedores fornecedores, Set<Telefone> telefone) {
-		Fornecedores findFornecedores = null;
-		Fornecedores fornecedoresPersist = null;
+	public void insertFornecedores(Fornecedores fornecedores) {
+		try {
 		String fornecedorNameFilter = null;
-		fornecedorNameFilter = this.filterNameFornecedor(fornecedores.getNome());
-		findFornecedores = this.findByNomeFornecedor(fornecedorNameFilter);
-		if (findFornecedores == null) {
+			fornecedorNameFilter = this.filterNameFornecedor(fornecedores.getNome());
 			fornecedores.setNome(fornecedorNameFilter);
-			fornecedoresPersist = this.repository.save(fornecedores);
-			this.telService.insertTelefone(telefone);
+			this.repository.save(fornecedores);
+		}catch(RollbackException ex) {
+			ex.initCause(ex);
 		}
-		return fornecedoresPersist;
-
+		
 	}
 
 	// Edita o fornecedor somente se achar ele no banco
@@ -69,10 +63,9 @@ public class FornecedoresService {
 	// Busca pelo nome do fornecedor
 	public Fornecedores findByNomeFornecedor(String name) {
 		Fornecedores fornecedores = null;
-		String nameFilter = null;
+		String nameFilter = null;	
 		nameFilter = this.filterNameFornecedor(name);
 		fornecedores = this.repository.findByNomeContaining(nameFilter);
-
 		return fornecedores;
 	}
 
@@ -88,6 +81,13 @@ public class FornecedoresService {
 			} else {
 				this.repository.fornecedorActive(fornecedores.getId());
 			}
+		}
+	}
+	public void verifyFornecedores(String name) {
+		Fornecedores returnFornecedores =null;
+		returnFornecedores = this.repository.findByNomeContaining(name);
+		if(returnFornecedores == null) {
+			throw new ResourceNotFoundException("Nenhum fornecedor encontrado com o nome: " +name);
 		}
 	}
 

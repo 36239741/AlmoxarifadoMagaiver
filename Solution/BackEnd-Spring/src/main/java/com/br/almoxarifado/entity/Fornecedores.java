@@ -1,7 +1,7 @@
 package com.br.almoxarifado.entity;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -35,6 +36,7 @@ public class Fornecedores implements Serializable {
 	@Column(name = "fornecedor_id")
 	private Long id;
 	
+	@Column(unique = true)
 	@NotNull(message = "Nenhum nome inserido")
 	@NotBlank(message = "Nome em branco")
 	@Size(max = 50, message = "Nome inserido excede o tamanho do campo")
@@ -45,8 +47,10 @@ public class Fornecedores implements Serializable {
 	@NotBlank(message = "E-mail em branco")
 	private String email;
 	
-	@OneToMany(mappedBy = "fornecedor", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true )
-	private Set<Telefone> telefone;
+	
+	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true )
+	@JoinColumn(name = "fornecedor_id")
+	private List<Telefone> telefone;
 	
 	@Size(max = 15,message = "Nome inserido excede o tamanho do campo")
 	@NotBlank(message = "Cep em branco")

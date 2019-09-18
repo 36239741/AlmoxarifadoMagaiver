@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.br.almoxarifado.entity.Fornecedores;
 @Repository
 public interface FornecedorRepository extends JpaRepository <Fornecedores, Long> {
-	@Query(value = "SELECT * FROM tbl_fornecedor WHERE nome ILIKE %?1%",nativeQuery = true)
+	@Query(value = "SELECT * FROM tbl_fornecedor WHERE nome ILIKE ?1",nativeQuery = true)
 	Fornecedores findByNomeContaining (String name);
 	@Modifying
 	@Query(value = "UPDATE tbl_fornecedor SET fornecedores_status = 'true' WHERE fornecedor_id = ?1")

@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "UPDATE tbl_user SET status_conta = 'true' WHERE user_id = ?1")
 	void userActiveAccount(Long id);
 	@Modifying
-	@Query(value = "UPDATE tbl_user SET senha 1? WHERE user_id = ?2")
+	@Query(value = "UPDATE tbl_user SET senha = ?1 WHERE user_id = ?2")
 	Integer userChangePassword(String senha,String email);
 }

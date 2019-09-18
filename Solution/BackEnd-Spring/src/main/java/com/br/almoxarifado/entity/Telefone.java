@@ -1,15 +1,13 @@
 package com.br.almoxarifado.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,9 +25,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tbl_telefone")
-public class Telefone implements Serializable{
+public class Telefone {
 	
-	public static final long serialVersionUID = 1;
+	
 	
 	@Id
 	@GeneratedValue()
@@ -40,12 +38,10 @@ public class Telefone implements Serializable{
 	private TipoTelefone tipoTelefone;
 	
 	@NotNull(message = "Nenhum numero de telefone inserido")
+	@NotBlank(message = "Numero de telefone em Branco")
 	@Size(max = 15)
 	private String numero;
 	
-	@ManyToOne()
-	@JoinColumn(name = "fornecedor_id")
-	private Fornecedores fornecedor;
 
 
 }
