@@ -37,12 +37,10 @@ public class User implements Serializable {
 	private Long id;
 
 	@NotBlank(message = "Nome em branco")
-	@NotNull(message = "Deve informar um valor")
 	@Size(max = 40)
 	private String nome;
 
 	@Email(message = "Formato Invalido")
-	@NotNull(message = "Deve Infomar um valor")
 	@Size(max = 40)
 	@NotBlank(message = "E-mail em branco")
 	@Column(unique = true)
@@ -50,7 +48,6 @@ public class User implements Serializable {
 	
 	@JsonIgnore
 	@NotBlank(message = "Senha em branco")
-	@NotNull(message = "Informe um valor")
 	@Size(min = 8, max = 70)
 	private String senha;
 	

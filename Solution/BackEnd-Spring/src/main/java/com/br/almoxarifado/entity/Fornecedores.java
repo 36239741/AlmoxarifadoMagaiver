@@ -12,45 +12,57 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.hateoas.ResourceSupport;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @ToString
+@Getter()
 @Entity(name = "tbl_fornecedor")
-public class Fornecedores implements Serializable {
+public class Fornecedores extends ResourceSupport implements Serializable {
 	private static final long serialVersionUID = 1;
+	
+
+	/**
+	 * =========================== ATRIBUTOS
+	 */
+	
 	@Id()
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "fornecedor_id")
-	private Long id;
+	private Long fornecedorId;
 	
 	@Column(unique = true)
-	@NotNull(message = "Nenhum nome inserido")
 	@NotBlank(message = "Nome em branco")
 	@Size(max = 50, message = "Nome inserido excede o tamanho do campo")
 	private String nome;
 	
 	@Email(message = "E-mail Invalido")
-	@NotNull(message = "Nenhum E-mail inserido")
 	@NotBlank(message = "E-mail em branco")
 	private String email;
 	
-	
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true )
+	@NotEmpty
+	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST},orphanRemoval = true)
 	@JoinColumn(name = "fornecedor_id")
 	private List<Telefone> telefone;
+	
 	
 	@Size(max = 15,message = "Nome inserido excede o tamanho do campo")
 	@NotBlank(message = "Cep em branco")
@@ -67,6 +79,22 @@ public class Fornecedores implements Serializable {
 	private String estado;
 	@Size(max =2 , message = "Nome inserido excede o tamanho do campo")
 	private String pais;
+	
 	@Column(name = "fornecedores_status")
 	private Boolean fornecedoresStatus = true;
+	
+	
+	/**
+	 * =========================== METODOS
+	 */
+	
+	
+	// Filtra o nome do fornecedor retira os espacos e deixar maiusculo
+	@PrePersist
+	@PreUpdate
+	public void filterNameFornecedor() {
+		String filterSpace = null;
+		filterSpace = this.getNome().replace(" ", "");
+		this.setNome(filterSpace);
+	}
 }

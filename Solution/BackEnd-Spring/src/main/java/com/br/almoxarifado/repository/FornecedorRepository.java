@@ -12,8 +12,8 @@ public interface FornecedorRepository extends JpaRepository <Fornecedores, Long>
 	Fornecedores findByNomeContaining (String name);
 	@Modifying
 	@Query(value = "UPDATE tbl_fornecedor SET fornecedores_status = 'true' WHERE fornecedor_id = ?1")
-	void fornecedorActive(Long id);
+	void fornecedorActive(long id);
 	@Modifying
 	@Query(value = "UPDATE tbl_fornecedor SET fornecedores_status = 'false' WHERE fornecedor_id = ?1")
-	 void fornecedorDesative(Long id);
+	void fornecedorDesative(long id);
 }

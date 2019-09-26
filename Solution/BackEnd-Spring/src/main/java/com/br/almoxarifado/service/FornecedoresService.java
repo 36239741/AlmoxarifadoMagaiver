@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.br.almoxarifado.entity.Fornecedores;
-import com.br.almoxarifado.error.ResourceNotFoundException;
 import com.br.almoxarifado.repository.FornecedorRepository;
 
 @Service
@@ -19,54 +19,33 @@ public class FornecedoresService {
 	FornecedorRepository repository;
 
 	// Isere somente se nao existir o mesmo nome cadastrado
-	public void insertFornecedores(Fornecedores fornecedores) {
+	public Fornecedores insertFornecedores(Fornecedores fornecedores) {
+		Fornecedores returnFornecedores = null;
 		try {
-		String fornecedorNameFilter = null;
-			fornecedorNameFilter = this.filterNameFornecedor(fornecedores.getNome());
-			fornecedores.setNome(fornecedorNameFilter);
-			this.repository.save(fornecedores);
+			returnFornecedores = this.repository.save(fornecedores);
 		}catch(RollbackException ex) {
 			ex.initCause(ex);
 		}
-		
+		return returnFornecedores;
+				
 	}
 
-	// Edita o fornecedor somente se achar ele no banco
-	public Fornecedores updateFornecedores(Fornecedores fornecedores) {
-		String filterFornecedorName = null;
-		Fornecedores fornecedoresPersist = null;
-		Fornecedores findFornecedores;
-		filterFornecedorName = this.filterNameFornecedor(fornecedores.getNome());
-		findFornecedores = this.findByNomeFornecedor(filterFornecedorName);
-		if (findFornecedores != null) {
-			fornecedoresPersist = this.repository.save(fornecedores);
-		}
-
-		return fornecedoresPersist;
-	}
 
 	// Retorna uma Pagina com 10 fornecedores
-	public Page<Fornecedores> findAll() {
-		Page<Fornecedores> page;
-		PageRequest pageable = PageRequest.of(0, 10);
-		page = this.repository.findAll(pageable);
-		return page;
+	public Page<Fornecedores> findAll(int page, int size) {
+		Page<Fornecedores> pageFornecedores;
+		PageRequest pageable = PageRequest.of(page, size);
+		pageFornecedores = this.repository.findAll(pageable);
+		return pageFornecedores;
 	}
 
-	// Filtra o nome do fornecedor retira os espacos e deixar maiusculo
-	public String filterNameFornecedor(String getname) {
-		String filterSpace = null;
-		filterSpace = getname.replace(" ", "");
-		return filterSpace;
-	}
+
 
 	// Busca pelo nome do fornecedor
 	public Fornecedores findByNomeFornecedor(String name) {
-		Fornecedores fornecedores = null;
-		String nameFilter = null;	
-		nameFilter = this.filterNameFornecedor(name);
-		fornecedores = this.repository.findByNomeContaining(nameFilter);
-		return fornecedores;
+		Fornecedores returnFornecedores = this.repository.findByNomeContaining(name);
+		Assert.notNull(returnFornecedores, "Fornecedor "+name+" nao encontrado");
+		return returnFornecedores;
 	}
 
 	// Se o campo fornecedor_status estiver true ele muda para false e vice-versa
@@ -76,19 +55,15 @@ public class FornecedoresService {
 		if (fornecedores != null) {
 
 			if (fornecedores.getFornecedoresStatus() == true) {
-				this.repository.fornecedorDesative(fornecedores.getId());
+				 this.repository.fornecedorDesative(fornecedores.getFornecedorId());
 
 			} else {
-				this.repository.fornecedorActive(fornecedores.getId());
+				 this.repository.fornecedorActive(fornecedores.getFornecedorId());
 			}
 		}
 	}
-	public void verifyFornecedores(String name) {
-		Fornecedores returnFornecedores =null;
-		returnFornecedores = this.repository.findByNomeContaining(name);
-		if(returnFornecedores == null) {
-			throw new ResourceNotFoundException("Nenhum fornecedor encontrado com o nome: " +name);
-		}
-	}
+	
+
+
 
 }

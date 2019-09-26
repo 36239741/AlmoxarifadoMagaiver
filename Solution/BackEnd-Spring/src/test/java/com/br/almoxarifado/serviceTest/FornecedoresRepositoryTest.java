@@ -56,7 +56,7 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 	@Test
 	public void findAllMustPass() {
 		Page<Fornecedores> page = null;
-		page = this.service.findAll();
+		page = this.service.findAll(1,1);
 		Assert.assertNotNull(page);
 	}
 	@Test
@@ -66,9 +66,9 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 	@Test
 	public void findNameMustPass() {
 		Fornecedores forn = null;
-		forn = this.service.findByNomeFornecedor("martelo sa");
+		forn = this.service.findByNomeFornecedor("qweqe");
 		Assert.assertNotNull(forn);
-		Assert.assertEquals("MarteloSA", forn.getNome());
+		Assert.assertEquals("qweqe", forn.getNome());
 	}
 	@Test
 	public void editFornecedorAndTelefoneMustPass() {
@@ -76,7 +76,7 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 		Fornecedores returnFornecedores = null;
 		fornecedores = this.service.findByNomeFornecedor("Martelosa");
 		fornecedores.setEmail("Henrique@hotmail.com");
-		returnFornecedores = this.service.updateFornecedores(fornecedores);
+		returnFornecedores = this.service.insertFornecedores(fornecedores);
 		Assert.assertEquals(fornecedores.getEmail() ,returnFornecedores.getEmail());
 	}
 	/*@Test(expected = AssertionError.class)

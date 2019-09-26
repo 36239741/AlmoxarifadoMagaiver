@@ -10,6 +10,9 @@ import com.br.almoxarifado.entity.Item;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query(value = "SELECT * FROM tbl_item WHERE descricao ILIKE ?1",nativeQuery = true)
 	Item findByDescricao (String descricao);
-	@Query(value = "SELECT * FROM tbl_item WHERE item_id = ?1", nativeQuery = true)
-	Item FindById (Long itemId);
+	
+	@Query(value = "SELECT * FROM tbl_item WHERE local_armazenamento ILIKE ?1",nativeQuery = true)
+	Item findByLocalArmazenamento (String localArmazenamento);
+	
+	Item findById(long id);
 }

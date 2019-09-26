@@ -37,7 +37,6 @@ public class Telefone {
 	@Enumerated
 	private TipoTelefone tipoTelefone;
 	
-	@NotNull(message = "Nenhum numero de telefone inserido")
 	@NotBlank(message = "Numero de telefone em Branco")
 	@Size(max = 15)
 	private String numero;

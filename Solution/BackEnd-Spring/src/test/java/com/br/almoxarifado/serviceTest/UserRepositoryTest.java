@@ -26,6 +26,8 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
 	}
 	@Test
+	@Sql({"/dataset/truncateUser.sql",
+			"/dataset/users.sql"})
 	public void findByEmailMustPass() {
 		User findByEmail = null;
 		findByEmail = this.service.findByemail("henriquenitatori@hotmail.com");

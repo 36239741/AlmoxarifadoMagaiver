@@ -4,8 +4,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.br.almoxarifado.entity.Item;
+import com.br.almoxarifado.error.ExistingItemException;
 import com.br.almoxarifado.repository.ItemRepository;
 
 @Service
@@ -14,45 +16,75 @@ public class ItemService {
 	@Autowired
 	private ItemRepository repository;
 
-	// O item so vai ser inserido se nao tiver um mesmo item com o mesmo fornecedor
+
+	/**
+	 * Serviço para inserir um item 
+	 * @param item
+	 * @return
+	 */
+	
 	public Item insert(Item item) {
-		Item itemPersistido = null;
-		Item itemFindByDescricao = null;
-		itemFindByDescricao = this.findByDescricao(item.getDescricao());
-		if (itemFindByDescricao != null) {
-			if (itemFindByDescricao.getFornecedor().getId() != item.getFornecedor().getId()) {
-				itemPersistido = this.repository.save(item);
+		Item findByIdItem = null;
+		Item itemPersist = null;
+		findByIdItem = this.repository.findByDescricao(item.getDescricao());
+		if(findByIdItem != null) {
+			if(findByIdItem.getFornecedor().getFornecedorId().equals(item.getFornecedor().getFornecedorId()) && findByIdItem.getDescricao().equals(item.getDescricao())) {
+				throw new ExistingItemException("Estem item: "+ findByIdItem.getDescricao() +" ja esta cadastrado");
 			}
-		} else {
-			itemPersistido = this.repository.save(item);
+			else {
+				itemPersist =  this.repository.save(item);
+			}
 		}
-		return itemPersistido;
+		else {
+			itemPersist = this.repository.save(item);
+		}
+		return itemPersist;
 	}
 
-	// Busca pelo campo descricao
+	/**
+	 * Serviço buscar um item pela descricao
+	 * @param descricao
+	 * @return
+	 */
+	
 	public Item findByDescricao(String descricao) {
 		Item findItem = null;
 		findItem = this.repository.findByDescricao(descricao);
+		Assert.notNull(findItem, "Item com a descricao: "+descricao+" nao encontrado");
 		return findItem;
 	}
 
-	// Edita o item somente se achar ele no banco
-	public Item edit(Item item) {
-		Item findByIditem = null;
-		Item editedItem = null;
-		findByIditem = this.findById(item.getId());
-		if (findByIditem != null) {
-			editedItem = this.repository.save(item);
-		}
-		return editedItem;
-	}
 
-	// Busca o item pelo Id
-	public Item findById(Long itemId) {
+
+	/**
+	 * Serviço buscar um item pelo id
+	 * @param itemId
+	 * @return
+	 */
+	
+	public Item findById(long itemId) {
 		Item itemFindById = null;
-		itemFindById = this.repository.FindById(itemId);
+		itemFindById = this.repository.findById(itemId);
+		Assert.notNull(itemFindById, "ID: "+itemId+" nao encontrado");
 		return itemFindById;
 
 	}
+	
+
+	/**
+	 * Serviço buscar um item pelo id
+	 * @param localArmazenamento
+	 * @return
+	 */
+	
+	public Item findByLocalDeArmazenamento(String localArmazenamento) {
+		Item item = this.repository.findByLocalArmazenamento(localArmazenamento);
+		Assert.notNull(item, "Local de armazenamento: "+localArmazenamento+" nao encontrado");
+		return item ;
+	}
+
+	
+
+	
 
 }
