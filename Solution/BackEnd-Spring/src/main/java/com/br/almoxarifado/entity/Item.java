@@ -1,19 +1,17 @@
 package com.br.almoxarifado.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.hateoas.ResourceSupport;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,13 +22,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Entity(name = "tbl_item")
-public class Item extends ResourceSupport{
+public class Item implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	@Column(name = "item_id")
-	private Long itemId;
+	private long itemId;
+	@NotNull(message = "Nenhum codigo gerado")
+	private String codigo;
 	@Size(max = 30)
 	@NotBlank(message = "Descricao em branco")
 	private String descricao;
@@ -42,10 +46,8 @@ public class Item extends ResourceSupport{
 	@NotNull(message = "Nenhum valor inserido")
 	private Double valor;
 	
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@ManyToOne(fetch = FetchType.LAZY,optional = false)
-	@JoinColumn(name = "fornecedor_id")
-	private Fornecedores fornecedor;
+	@ManyToOne(fetch = FetchType.LAZY,optional = true,targetEntity = Fornecedor.class,cascade = {CascadeType.REFRESH,CascadeType.MERGE})
+	private Fornecedor fornecedor;
 	
 	@Column(name = "item_status")
 	private Boolean itemStatus = true;

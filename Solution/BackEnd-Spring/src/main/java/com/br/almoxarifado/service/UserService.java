@@ -27,7 +27,7 @@ public class UserService {
 	@Autowired
 	private TokenService tokenService;
 
-	private GeradorSenhaService geradorSenha;
+	private GeradorDeCaracteresAleatorios geradorSenha;
 
 	// Insere um user verificando se ja tem um email cadastrado
 	public User insertUser(User user) throws MessagingException {
@@ -122,7 +122,7 @@ public class UserService {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		returnUser = this.findByemail(email);
 		if(returnUser != null) {
-			passwordGeneretad = this.geradorSenha.gerarSenhaAleatoria();
+			passwordGeneretad = this.geradorSenha.gerarCaractereAleatorio();
 			returnChangePassword = this.repository.userChangePassword(passwordEncoder.encode(passwordGeneretad), email);
 			this.emailService.enviarEmail(email,"Troca de Senha",this.emailService.messageStructureChangePassword(email, passwordGeneretad));
 		}

@@ -8,15 +8,16 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-import com.br.almoxarifado.entity.Fornecedores;
+import com.br.almoxarifado.dto.DtoFornecedor;
+import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.entity.Telefone;
 import com.br.almoxarifado.enums.TipoTelefone;
-import com.br.almoxarifado.service.FornecedoresService;
+import com.br.almoxarifado.service.FornecedorService;
 
 
 public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 	@Autowired
-	private FornecedoresService service;
+	private FornecedorService service;
 
 	@Test
 	public void insertFornecedorMustPass() {
@@ -24,8 +25,8 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 		Telefone tel = new Telefone();
 		Telefone telMovel = new Telefone();
 		//Fornecedor
-		Fornecedores forn = new Fornecedores();
-		forn.setNome("ASSA");
+		DtoFornecedor forn = new DtoFornecedor();
+		forn.setNome("henrique");
 		forn.setEmail("martlo@hotmail.com");
 		forn.setBairro("curitbano");
 		forn.setCep("123123");
@@ -55,7 +56,7 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 	}
 	@Test
 	public void findAllMustPass() {
-		Page<Fornecedores> page = null;
+		Page<Fornecedor> page = null;
 		page = this.service.findAll(1,1);
 		Assert.assertNotNull(page);
 	}
@@ -65,18 +66,18 @@ public class FornecedoresRepositoryTest extends AbstractIntegrationTest{
 	}
 	@Test
 	public void findNameMustPass() {
-		Fornecedores forn = null;
+		Fornecedor forn = null;
 		forn = this.service.findByNomeFornecedor("qweqe");
 		Assert.assertNotNull(forn);
 		Assert.assertEquals("qweqe", forn.getNome());
 	}
 	@Test
 	public void editFornecedorAndTelefoneMustPass() {
-		Fornecedores fornecedores = null;
-		Fornecedores returnFornecedores = null;
+		Fornecedor fornecedores = null;
+		DtoFornecedor returnFornecedores = null;
 		fornecedores = this.service.findByNomeFornecedor("Martelosa");
 		fornecedores.setEmail("Henrique@hotmail.com");
-		returnFornecedores = this.service.insertFornecedores(fornecedores);
+		returnFornecedores = this.service.insertFornecedores(this.service.convertFornecedor(fornecedores));
 		Assert.assertEquals(fornecedores.getEmail() ,returnFornecedores.getEmail());
 	}
 	/*@Test(expected = AssertionError.class)

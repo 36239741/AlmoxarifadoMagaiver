@@ -3,23 +3,22 @@ package com.br.almoxarifado.serviceTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import com.br.almoxarifado.entity.Fornecedores;
+import com.br.almoxarifado.dto.DtoItem;
+import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.error.ExistingItemException;
-import com.br.almoxarifado.service.FornecedoresService;
+import com.br.almoxarifado.service.FornecedorService;
 import com.br.almoxarifado.service.ItemService;
 
 public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Autowired
 	private ItemService service;
 	@Autowired
-	private FornecedoresService fonecedor;
+	private FornecedorService fonecedor;
 
 	/**
 	 * ====================================== CADASTRAR * ===========================================
@@ -28,13 +27,13 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test
 	public void insertMustPass() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento("Xumodramo");
-		item.setFornecedor(fornecedores);
+		item.setFornecedor(this.fonecedor.convertFornecedor(fornecedores));
 		item.setQuantidade(43);
 		item.setValor(23.00);
 		returnItem = this.service.insert(item);
@@ -43,27 +42,6 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 
 	}
 	
-	/**
-	 * ====================================== CADASTRAR 2 * ===========================================
-	 */
-
-	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
-	@Test
-	public void insert2MustPass() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
-		fornecedores = this.fonecedor.findByNomeFornecedor("www");
-		item.setDescricao("Martelo");
-		item.setLocalArmazenamento("Xumodramo");
-		item.setFornecedor(fornecedores);
-		item.setQuantidade(43);
-		item.setValor(23.00);
-		returnItem = this.service.insert(item);
-		Assert.assertNotNull(returnItem);
-		Assert.assertEquals(returnItem, item);
-
-	}
 
 	/**
 	 * ====================================== LISTAR PELA DESCRICAO ===========================================
@@ -84,8 +62,8 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Test
 	public void findByIdMusPass() {
 		Item item = null;
-		item = this.service.findById(100);
-		Assert.assertNotNull(item.getId());
+		item = this.service.findByCodigo("1234567");
+		Assert.assertNotNull(item.getItemId());
 		Assert.assertEquals("Martelo", item.getDescricao());
 	}
 
@@ -96,27 +74,15 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test
 	public void editMustPass() {
-		Item itemFindById = null;
+		Item itemFindByCodigo = null;
 		Item returnItem = null;
-		itemFindById = this.service.findById(100);
-		itemFindById.setDescricao("Caneta");
-		itemFindById.setLocalArmazenamento("Sitt");
-		returnItem = this.service.insert(itemFindById);
+		itemFindByCodigo = this.service.findByCodigo("1234567");
+		itemFindByCodigo.setDescricao("Caneta");
+		itemFindByCodigo.setLocalArmazenamento("Sitt");
+		returnItem = this.service.update(itemFindByCodigo);
 		Assert.assertNotNull(returnItem);
 		Assert.assertEquals("Caneta", returnItem.getDescricao());
 		Assert.assertEquals("Sitt", returnItem.getLocalArmazenamento());
-	}
-
-	/**
-	 * ====================================== LISTAR PELO LOCAL DE ARMAZENAMENTO * ===========================================
-	 */
-	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
-	@Test
-	public void findByLocalArmazenamentoMusPass() {
-		Item item = null;
-		item = this.service.findByLocalDeArmazenamento("Loja1");
-		Assert.assertNotNull(item.getId());
-		Assert.assertEquals("Martelo", item.getDescricao());
 	}
 
 	/**
@@ -131,9 +97,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void insertMustFailDescricaoNotBlank() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao(" ");
 		item.setLocalArmazenamento("Xumodramo");
@@ -152,9 +118,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void inserDescricaoBlankMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao(" ");
 		item.setLocalArmazenamento("xumodromo");
@@ -174,9 +140,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void insertLocalArmazenamentoBlankMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento(" ");
@@ -196,9 +162,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = DataIntegrityViolationException.class)
 	public void insertFornecedorNullMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento("Xumodramo");
 		item.setFornecedor(fornecedores);
@@ -215,15 +181,15 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	 */
 	
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
-	@Test(expected = TransactionSystemException.class)
+	@Test()
 	public void insertQuantidadeNullMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento("Xumodramo");
-		item.setFornecedor(fornecedores);
+		item.setFornecedor();
 		item.setQuantidade(null);
 		item.setValor(23.00);
 		returnItem = this.service.insert(item);
@@ -239,9 +205,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void insertValorNullMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento("Xumodramo");
@@ -261,9 +227,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void insertDescricaoMaiorQueOCampoMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesouraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		item.setLocalArmazenamento("Xumodramo");
@@ -282,9 +248,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = TransactionSystemException.class)
 	public void insertLocalArmazenamentoMaiorQueOCampoMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("www");
 		item.setDescricao("Tesoura");
 		item.setLocalArmazenamento("XumodramoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
@@ -303,9 +269,9 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = ExistingItemException.class)
 	public void isertComItemEFornecedorIgualMustFail() {
-		Item item = new Item();
-		Item returnItem = null;
-		Fornecedores fornecedores = null;
+		DtoItem item = new DtoItem();
+		DtoItem returnItem = null;
+		Fornecedor fornecedores = null;
 		fornecedores = this.fonecedor.findByNomeFornecedor("ewrwer");
 		item.setDescricao("Martelo");
 		item.setLocalArmazenamento("Xumodramo");
@@ -318,13 +284,13 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 
 	}
 	/**
-	 * ====================================== BUSCA SEM ID CADASTRADO ===========================================
+	 * ====================================== BUSCA SEM CODIGO CADASTRADO ===========================================
 	 */
 	
 	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
 	@Test(expected = IllegalArgumentException.class)
 	public void findyidMustFail() {
-		this.service.findById(90);
+		this.service.findByCodigo("123123");
 
 	}
 	/**
@@ -335,12 +301,5 @@ public class ItemRepositoryTest extends AbstractIntegrationTest {
 	public void findByDescricaoMusFail() {
 		this.service.findByDescricao("sdfsdf");
 	}
-	/**
-	 * ====================================== BUSCA SEM LOCAL DE ARMAZENAMTO INFORMADO ===========================================
-	 */
-	@Sql({ "/dataset/truncateItem.sql", "/dataset/item.sql" })
-	@Test(expected = IllegalArgumentException.class)
-	public void findByLocalArmazenamentoMustFail() {
-		this.service.findByLocalDeArmazenamento("asdasd");
-	}
+
 }
