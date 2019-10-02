@@ -43,7 +43,7 @@ public class TokenService {
 		Integer compareDate = 0;
 		dataAtual = LocalDateTime.now();
 		returnToken = this.repository.findToken(token.getToken());
-		if (returnToken.getTokenStatus() == true) {
+		if (returnToken.getTokenStatus()) {
 			compareDate = dataAtual.compareTo(returnToken.getTempoExpiracao());
 			if(compareDate < 0) {
 				tokenValidate = true;

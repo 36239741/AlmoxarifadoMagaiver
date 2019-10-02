@@ -1,7 +1,5 @@
 package com.br.almoxarifado.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,16 +22,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity(name = "tbl_item")
-public class Item implements Serializable {
+public class Item   {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "item_id")
 	private long itemId;
 	@NotNull(message = "Nenhum codigo gerado")
+	@Column(unique = true)
 	private String codigo;
 	@Size(max = 30)
 	@NotBlank(message = "Descricao em branco")
@@ -46,7 +45,7 @@ public class Item implements Serializable {
 	@NotNull(message = "Nenhum valor inserido")
 	private Double valor;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional = true,targetEntity = Fornecedor.class,cascade = {CascadeType.REFRESH,CascadeType.MERGE})
+	@ManyToOne(fetch = FetchType.LAZY,optional = false,targetEntity = Fornecedor.class,cascade = {CascadeType.REFRESH})
 	private Fornecedor fornecedor;
 	
 	@Column(name = "item_status")

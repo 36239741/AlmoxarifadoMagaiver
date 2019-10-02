@@ -11,7 +11,7 @@ import com.br.almoxarifado.entity.Fornecedor;
 @Repository
 public interface FornecedorRepository extends JpaRepository <Fornecedor, Long> {
 	
-	@EntityGraph(attributePaths = {"telefone"})
+	@EntityGraph(attributePaths = {"item"})
 	Fornecedor findByNomeIgnoreCase (String name);
 	@Modifying
 	@Query(value = "UPDATE tbl_fornecedor SET fornecedores_status = 'true' WHERE fornecedor_id = ?1")

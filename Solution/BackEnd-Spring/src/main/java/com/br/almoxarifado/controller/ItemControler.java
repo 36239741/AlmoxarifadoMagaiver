@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.almoxarifado.dto.DtoFornecedor;
-import com.br.almoxarifado.dto.DtoItem;
+import com.br.almoxarifado.dto.DtoItemReponse;
+import com.br.almoxarifado.dto.DtoItemRequest;
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.service.ItemService;
 
@@ -40,12 +40,12 @@ public class ItemControler {
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
 	 */
 	@ApiOperation(value = "Salva um item",
-			response = DtoItem.class,
+			response = DtoItemRequest.class,
 			notes = "Essa operacao salva um item")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201,
 						message = "retorna o item salvo",
-						response = DtoItem.class),
+						response = DtoItemRequest.class),
 			@ApiResponse(
 						code = 400,
 						message= "Caso ocorra algum error no request sera lancado uma exception")
@@ -56,9 +56,9 @@ public class ItemControler {
 	 * @return retorna o item salvo
 	 */
 	@PostMapping
-	public ResponseEntity<DtoItem> insertitem(@Validated @RequestBody DtoItem item){
-		DtoItem returnItem = this.service.insert(item);
-		return new ResponseEntity<DtoItem>(returnItem, HttpStatus.CREATED);
+	public ResponseEntity<DtoItemRequest> insertitem(@Validated @RequestBody DtoItemRequest item){
+		DtoItemRequest returnItem = this.service.insert(item);
+		return new ResponseEntity<>(returnItem, HttpStatus.CREATED);
 	}
 	
 	/*
@@ -82,9 +82,9 @@ public class ItemControler {
 	 * @return retorna o item buscado
 	 */
 	@GetMapping(path = "/{codigo}")
-	public ResponseEntity<DtoItem> getBiyCodigo(@PathVariable String codigo){
+	public ResponseEntity<DtoItemRequest> getBiyCodigo(@PathVariable String codigo){
 		Item item = this.service.findByCodigo(codigo);
-		return new ResponseEntity<DtoItem>(this.service.convertItem(item), HttpStatus.OK);
+		return new ResponseEntity<>(this.service.convertItem(item), HttpStatus.OK);
 	}
 	
 	
@@ -109,19 +109,19 @@ public class ItemControler {
 	 */
 	
 	@GetMapping()
-	public ResponseEntity<List<DtoItem>> findAll(@RequestParam(value = "page",required = true) int page ,
+	public ResponseEntity<List<DtoItemReponse>> findAll(@RequestParam(value = "page",required = true) int page ,
 			@RequestParam(value = "size",required = true) int size){
-		Page<Item> returnItem = null;
-		List<DtoItem> dto = null;
+		Page<DtoItemReponse> returnItem = null;
+		List<DtoItemReponse> dto = null;
 		returnItem = this.service.findAllIten(page, size);
 		ModelMapper modelMapper = new ModelMapper();
-		java.lang.reflect.Type targetListType = new TypeToken<List<DtoItem>>() {}.getType();
+		java.lang.reflect.Type targetListType = new TypeToken<List<DtoItemReponse>>() {}.getType();
 		dto = modelMapper.map(returnItem.getContent(), targetListType);
-		for(DtoItem item: dto) {
+		for(DtoItemReponse item: dto) {
 			String codigo =  item.getCodigo();
 			item.add(linkTo(methodOn(ItemControler.class).getBiyCodigo(codigo)).withSelfRel().withRel("Find by codigo").withType("GET"));
 		}
-		return new ResponseEntity<List<DtoItem>>(dto,HttpStatus.OK);
+		return new ResponseEntity<>(dto,HttpStatus.OK);
 		
 	}
 	

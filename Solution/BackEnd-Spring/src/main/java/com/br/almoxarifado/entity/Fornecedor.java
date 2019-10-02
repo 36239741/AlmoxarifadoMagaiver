@@ -1,6 +1,5 @@
 package com.br.almoxarifado.entity;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -32,20 +30,16 @@ import lombok.ToString;
 @ToString
 @Getter()
 @Entity(name = "tbl_fornecedor")
-public class Fornecedor implements Serializable{	
+public class Fornecedor  {	
 
 	/*
 	 * ATRIBUTOS
 	*
 	 */
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 
 	@Id()
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue()
 	@Column(name = "fornecedor_id")
 	private long fornecedorId;
 	
@@ -59,11 +53,12 @@ public class Fornecedor implements Serializable{
 	private String email;
 	
 	@NotEmpty
-	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE},orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE},orphanRemoval = true)
 	@JoinColumn(name = "fornecedor_id")
 	private List<Telefone> telefone;
 	
-	@OneToMany(targetEntity = Item.class,fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.REFRESH,CascadeType.PERSIST},orphanRemoval = true)
+	
+	@OneToMany(targetEntity = Item.class,mappedBy = "fornecedor",fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},orphanRemoval = true)
 	private List<Item> item;
 	
 	@Size(max = 15,message = "Nome inserido excede o tamanho do campo")
@@ -99,4 +94,11 @@ public class Fornecedor implements Serializable{
 		filterSpace = this.getNome().replace(" ", "");
 		this.setNome(filterSpace);
 	}
+
+
+
+
+
+
+
 }

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +31,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController()
-@CrossOrigin(origins = "https://localhost:8443")
 @RequestMapping(path = "v1/fornecedores")
 public class FornecedorController {
 	@Autowired
@@ -55,7 +53,7 @@ public class FornecedorController {
 		Fornecedor fornecedores = null;
 		fornecedores = this.service.findByNomeFornecedor(name);
 		DtoFornecedor dto = this.service.convertFornecedor(fornecedores);
-		return new ResponseEntity<DtoFornecedor>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	/*
@@ -90,7 +88,7 @@ public class FornecedorController {
 					.withRel("Active or desative by name").withType("PATCH"));
 		}
 		
-		return new ResponseEntity<List<DtoFornecedor>>(dto, HttpStatus.OK);
+		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
@@ -111,7 +109,7 @@ public class FornecedorController {
 		ModelMapper modelMapper = new ModelMapper();
 		DtoFornecedor dto =  modelMapper.map(fornecedores, DtoFornecedor.class);
 		returnFornecedores = this.service.insertFornecedores(dto);
-		return new ResponseEntity<DtoFornecedor>(returnFornecedores, HttpStatus.CREATED);
+		return new ResponseEntity<>(returnFornecedores, HttpStatus.CREATED);
 	}
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
@@ -130,7 +128,7 @@ public class FornecedorController {
 	public ResponseEntity<DtoFornecedor> updateFornecedores(@Validated @RequestBody DtoFornecedor fornecedores) {
 		DtoFornecedor returnFornecedores = null;
 		returnFornecedores = this.service.insertFornecedores(fornecedores);
-		return new ResponseEntity<DtoFornecedor>(returnFornecedores, HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(returnFornecedores, HttpStatus.NO_CONTENT);
 	}
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
@@ -146,7 +144,7 @@ public class FornecedorController {
 	 * @return httpStatus 204
 	 */
 	@PatchMapping(path = "/{name}")
-	public ResponseEntity<?> ativarFornecedores(@Validated @PathVariable String name) {
+	public ResponseEntity<HttpStatus> ativarFornecedores(@Validated @PathVariable String name) {
 		this.service.desativarOrAtivarFornecedor(name);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

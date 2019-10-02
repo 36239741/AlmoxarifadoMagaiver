@@ -2,6 +2,7 @@ package com.br.almoxarifado.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -22,14 +23,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tbl_telefone")
-public class Telefone {
+public class Telefone   {
+
+	/**
+	 * 
+	 */
+
 
 	@Id
 	@GeneratedValue()
 	@Column(name = "telefone_id")
-	private Long id;
+	private long id;
 
-	@Enumerated
+	@Enumerated(EnumType.ORDINAL)
 	private TipoTelefone tipoTelefone;
 
 	@NotBlank(message = "Numero de telefone em Branco")

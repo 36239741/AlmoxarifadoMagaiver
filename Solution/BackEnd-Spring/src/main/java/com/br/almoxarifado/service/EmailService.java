@@ -30,15 +30,15 @@ public class EmailService {
 
 	public String messageStructure(String email, UUID uuid) {
 		String url = "http://localhost:8080/active/" + uuid;
-		String messageHtml = "<html><body><h1>Ativacao da Conta</h1>" + "<br/>" + "<b><p>Usuario: </p></b> " + email
+		return "<html><body><h1>Ativacao da Conta</h1>" + "<br/>" + "<b><p>Usuario: </p></b> " + email
 				+ "<p>Para ativar <a href='" + url + "'>Clique Aqui</a></body></html>";
 
-		return messageHtml;
+		
 	}
 	public String messageStructureChangePassword(String email, String senha) {
-		String messageHtml = "<html><body><h1>Troca de Senha</h1>" + "<br/>" + "<b><p>Usuario: </p></b> " + email
+		return  "<html><body><h1>Troca de Senha</h1>" + "<br/>" + "<b><p>Usuario: </p></b> " + email
 				+ "Nova senha<"+senha+"/body></html>";
 
-		return messageHtml;
+		
 	}
 }

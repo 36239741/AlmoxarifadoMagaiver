@@ -1,10 +1,7 @@
 package com.br.almoxarifado.error;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.validation.FieldError;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

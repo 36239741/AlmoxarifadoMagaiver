@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.br.almoxarifado.dto.DtoFornecedor;
+import com.br.almoxarifado.dto.DtoFornecedorItem;
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.repository.FornecedorRepository;
 
@@ -74,7 +75,7 @@ public class FornecedorService {
 		fornecedores = this.findByNomeFornecedor(name);
 		if (fornecedores != null) {
 
-			if (fornecedores.getFornecedoresStatus() == true) {
+			if (fornecedores.getFornecedoresStatus()) {
 				 this.repository.fornecedorDesative(fornecedores.getFornecedorId());
 
 			} else {
@@ -85,14 +86,18 @@ public class FornecedorService {
 	
 		public Fornecedor convertDtoFornecedor(DtoFornecedor dtoFornecedor) {
 		ModelMapper modelMapper = new ModelMapper();
-		Fornecedor returnFornecedor = modelMapper.map(dtoFornecedor, Fornecedor.class);
-		return returnFornecedor;
+		return modelMapper.map(dtoFornecedor, Fornecedor.class);
+		
 	}
 		public DtoFornecedor convertFornecedor(Fornecedor fornecedor) {
 		ModelMapper modelMapper = new ModelMapper();
-		DtoFornecedor dtoFornecedor = modelMapper.map(fornecedor, DtoFornecedor.class);
-		return dtoFornecedor;
-
+		return modelMapper.map(fornecedor, DtoFornecedor.class);
+		
+	}
+		public DtoFornecedorItem convertFornecedorItem(Fornecedor fornecedor) {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(fornecedor, DtoFornecedorItem.class);
+		
 	}
 	
 

@@ -30,7 +30,7 @@ import com.br.almoxarifado.error.ExistingItemException;
 	@ControllerAdvice
 public class RestExceptionHandler {
 	@ExceptionHandler(ExistingItemException.class)
-	public ResponseEntity<?> handleResourceNotFoundException(ExistingItemException rfnException){
+	public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ExistingItemException rfnException){
 		ErrorDetails rfnDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.NOT_FOUND.value())
@@ -41,7 +41,7 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(rfnDetails,HttpStatus.NOT_FOUND);
 	}
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException divException){
+	public ResponseEntity<ErrorDetails> handleDataIntegrityViolationException(DataIntegrityViolationException divException){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.BAD_REQUEST.value())
@@ -52,7 +52,7 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<?> handleRollbackException(MethodArgumentNotValidException rException){
+	public ResponseEntity<ErrorDetails> handleRollbackException(MethodArgumentNotValidException rException){
         BindingResult result = rException.getBindingResult();
         List<org.springframework.validation.FieldError> fieldErrors = result.getFieldErrors();
 		ErrorDetails divDetails = ErrorDetails.builder()
@@ -65,7 +65,7 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(divDetails,HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 	@ExceptionHandler(RollbackException.class)
-	public ResponseEntity<?> handleRollbackException(RollbackException bException){
+	public ResponseEntity<ErrorDetails> handleRollbackException(RollbackException bException){
 		Set<ConstraintViolation<?>> violations = ((ConstraintViolationException)bException.getCause()).getConstraintViolations();
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
@@ -77,7 +77,7 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public ResponseEntity<?> handleRollbackException(HttpRequestMethodNotSupportedException httpMNSException){
+	public ResponseEntity<ErrorDetails> handleRollbackException(HttpRequestMethodNotSupportedException httpMNSException){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.METHOD_NOT_ALLOWED.value())
@@ -88,79 +88,79 @@ public class RestExceptionHandler {
 		return new ResponseEntity<>(divDetails,HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<?> handleRollbackException(MissingServletRequestParameterException mSRPexception){
+	public ResponseEntity<ErrorDetails> handleRollbackException(MissingServletRequestParameterException msrPexception){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.BAD_REQUEST.value())
 		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(mSRPexception.getParameterName())
-		.developerMessage(mSRPexception.getMessage())
+		.detail(msrPexception.getParameterName())
+		.developerMessage(msrPexception.getMessage())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<?> handleRollbackException(IllegalArgumentException iAExcption){
+	public ResponseEntity<ErrorDetails> handleRollbackException(IllegalArgumentException iaExcption){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(iAExcption.getMessage())
-		.developerMessage(iAExcption.getClass().getSimpleName())
+		.detail(iaExcption.getMessage())
+		.developerMessage(iaExcption.getClass().getSimpleName())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public ResponseEntity<?> handleRollbackException(HttpMediaTypeNotSupportedException hMTNSExcption){
+	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMediaTypeNotSupportedException hmtnsExcption){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
 		.title(HttpStatus.UNSUPPORTED_MEDIA_TYPE.name())
-		.detail(hMTNSExcption.getMessage())
-		.developerMessage(hMTNSExcption.getClass().getSimpleName())
+		.detail(hmtnsExcption.getMessage())
+		.developerMessage(hmtnsExcption.getClass().getSimpleName())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
 	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
-	public ResponseEntity<?> handleRollbackException(InvalidDataAccessApiUsageException hMTNSExcption){
+	public ResponseEntity<ErrorDetails> handleRollbackException(InvalidDataAccessApiUsageException hmtnExcption){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(hMTNSExcption.getCause().getMessage())
-		.developerMessage(hMTNSExcption.getMessage())
+		.detail(hmtnExcption.getCause().getMessage())
+		.developerMessage(hmtnExcption.getMessage())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	@ExceptionHandler(NullPointerException.class)
-	public ResponseEntity<?> handleRollbackException(NullPointerException nPExcption){
+	public ResponseEntity<ErrorDetails> handleRollbackException(NullPointerException npExcption){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(nPExcption.getMessage())
-		.developerMessage(nPExcption.getClass().getSimpleName())
+		.detail(npExcption.getMessage())
+		.developerMessage(npExcption.getClass().getSimpleName())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<?> handleRollbackException(HttpMessageNotReadableException hMNRException){
+	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMessageNotReadableException hmnrException){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.BAD_REQUEST.value())
 		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(hMNRException.getMessage())
-		.developerMessage(hMNRException.getClass().getSimpleName())
+		.detail(hmnrException.getMessage())
+		.developerMessage(hmnrException.getClass().getSimpleName())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(HttpMessageConversionException.class)
-	public ResponseEntity<?> handleRollbackException(HttpMessageConversionException HMCException){
+	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMessageConversionException hmcException){
 		ErrorDetails divDetails = ErrorDetails.builder()
 		.timeStemp(LocalDateTime.now())
 		.status(HttpStatus.BAD_REQUEST.value())
 		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(HMCException.getMessage())
-		.developerMessage(HMCException.getClass().getSimpleName())
+		.detail(hmcException.getMessage())
+		.developerMessage(hmcException.getClass().getSimpleName())
 		.build();
 		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
 	}
