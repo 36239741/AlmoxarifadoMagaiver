@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.springframework.hateoas.ResourceSupport;
 
-import com.br.almoxarifado.entity.Item;
-import com.br.almoxarifado.entity.Telefone;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,8 +18,7 @@ public class DtoFornecedor extends ResourceSupport implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
 	private String email;
-	private List<Telefone> telefone;
-	private List<Item> item;
+	private List<DtoTelefone> telefone;
 	private String cep;
 	private String longadouro;
 	private int numero;
@@ -31,4 +27,5 @@ public class DtoFornecedor extends ResourceSupport implements Serializable  {
 	private String cidade;
 	private String estado;
 	private String pais;
+	private boolean fornecedorStatus;
 }

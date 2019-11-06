@@ -19,5 +19,6 @@ public interface FornecedorRepository extends JpaRepository <Fornecedor, Long> {
 	@Modifying
 	@Query(value = "UPDATE tbl_fornecedor SET fornecedores_status = 'false' WHERE fornecedor_id = ?1")
 	void fornecedorDesative(long id);
+	
 	DtoFornecedor save(DtoFornecedor fornecedores);
 }

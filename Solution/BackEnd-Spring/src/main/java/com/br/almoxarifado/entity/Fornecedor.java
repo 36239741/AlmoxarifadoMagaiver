@@ -15,7 +15,6 @@ import javax.persistence.PreUpdate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -62,8 +61,6 @@ public class Fornecedor  {
 	private List<Item> item;
 	
 	@Size(max = 15,message = "Nome inserido excede o tamanho do campo")
-	@NotBlank(message = "Cep em branco")
-	@NotNull(message = "Nenhum cep inserido")
 	private String cep;
 	@Size(max = 20,message = "Nome inserido excede o tamanho do campo")
 	private String longadouro;
@@ -78,7 +75,7 @@ public class Fornecedor  {
 	private String pais;
 	
 	@Column(name = "fornecedores_status")
-	private Boolean fornecedoresStatus = true;
+	private Boolean fornecedorStatus = true;
 	
 	
 	/**

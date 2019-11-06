@@ -56,8 +56,10 @@ public class User implements Serializable {
 	@Column(name = "status_conta")
 	private boolean statusConta = false;
 	
-	@Column(name = "status_user")
-	private boolean statusUser = true;
+	
+	private String token;
+	
+	private String tokeValidation;
 	
 	@Enumerated
 	private UserRolesEnums userRoles = UserRolesEnums.USER;

@@ -1,7 +1,5 @@
 package com.br.almoxarifado.service;
 
-import javax.persistence.RollbackException;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,24 +21,21 @@ public class FornecedorService {
 
 	/*
 	 * @param Fornecedores
-	 * 
+	 * a funcao ira inserir um fornecedor 
 	 * @return return the save object
 	 */	
 	public DtoFornecedor insertFornecedores(DtoFornecedor dtoFornecedor) {
 		Fornecedor returnFornecedores = null;
 		
-		try {
-			returnFornecedores = this.repository.save(this.convertDtoFornecedor(dtoFornecedor));
-		}catch(RollbackException ex) {
-			ex.initCause(ex);
-		}
+		returnFornecedores = this.repository.save(this.convertDtoFornecedor(dtoFornecedor));
+		
 		return this.convertFornecedor(returnFornecedores);
 				
 	}
 	
 	/*
-	 * @param integer em que pagina esta, integer tamanho da pagina
-	 * 
+	 * @param integer page, integer pageSize
+	 * ira fazer um find all e retornara em pageable
 	 * @return page fornecedores
 	 */		
 	@Transactional(readOnly = true)
@@ -54,7 +49,7 @@ public class FornecedorService {
 
 	/*
 	 * @param String nome do fornecedor
-	 * 
+	 * buscara o fornedor pelo nome
 	 * @return Fornecedores
 	 */
 	@Transactional(readOnly = true)
@@ -66,23 +61,30 @@ public class FornecedorService {
 
 	/*
 	 * @param String nome do fornecedor
-	 * 
+	 * ira desativar e ativar o fornecedor
 	 * @return void
 	 */
 	
-	public void desativarOrAtivarFornecedor(String name) {
+	public Boolean desativarOrAtivarFornecedor(String name) {
 		Fornecedor fornecedores = null;
+		Boolean returnStatus = null;
 		fornecedores = this.findByNomeFornecedor(name);
 		if (fornecedores != null) {
 
-			if (fornecedores.getFornecedoresStatus()) {
+			if (fornecedores.getFornecedorStatus()) {
 				 this.repository.fornecedorDesative(fornecedores.getFornecedorId());
-
-			} else {
+				 returnStatus = false;
+			} 
+			else {
 				 this.repository.fornecedorActive(fornecedores.getFornecedorId());
+				 returnStatus = true;
 			}
+			
 		}
+		return returnStatus;
 	}
+
+							/* METODOS DE CONVERSAO DTO */
 	
 		public Fornecedor convertDtoFornecedor(DtoFornecedor dtoFornecedor) {
 		ModelMapper modelMapper = new ModelMapper();

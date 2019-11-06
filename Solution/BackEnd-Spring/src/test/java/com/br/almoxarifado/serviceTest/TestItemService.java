@@ -20,13 +20,6 @@ import com.br.almoxarifado.error.ExistingItemException;
 import com.br.almoxarifado.service.FornecedorService;
 import com.br.almoxarifado.service.ItemService;
 
-/*ATRIBUTOS	*/
-
-
-/*CONSTRUCAO*/
-	
-	
-/*TESTE*/
 
 public class TestItemService extends AbstractIntegrationTest {
 	@Autowired
@@ -165,7 +158,7 @@ public class TestItemService extends AbstractIntegrationTest {
 	public void testUpdateItemMustPass() {
 	/*ATRIBUTOS	*/
 	Item findItem = null;
-	DtoItemRequest Dtoitem = null;
+	DtoItemReponse Dtoitem = null;
 	
 	/*CONSTRUCAO*/
 	findItem = this.service.findByCodigo("1234567");

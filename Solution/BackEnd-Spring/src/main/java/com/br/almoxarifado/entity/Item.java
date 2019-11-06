@@ -1,6 +1,5 @@
 package com.br.almoxarifado.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +44,7 @@ public class Item   {
 	@NotNull(message = "Nenhum valor inserido")
 	private Double valor;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional = false,targetEntity = Fornecedor.class,cascade = {CascadeType.REFRESH})
+	@ManyToOne(fetch = FetchType.LAZY,optional = false,targetEntity = Fornecedor.class)
 	private Fornecedor fornecedor;
 	
 	@Column(name = "item_status")

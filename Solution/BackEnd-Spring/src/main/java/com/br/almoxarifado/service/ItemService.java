@@ -77,8 +77,8 @@ public class ItemService {
 	 * @param Item realizara o update do item
 	 * @return Item que foi modificado
 	 */
-	public DtoItemRequest update(Item item) {
-		return this.convertItem(this.repository.save(item));
+	public DtoItemReponse update(Item item) {
+		return this.convertDtoItem(item);
 	}
 
 	/**
@@ -167,6 +167,17 @@ public class ItemService {
 		
 	}
 	
+	/*Servico para converte um Item
+	 * @param DtoItemResonse
+	 * convert um Item.class para um DtoItemReponse.class
+	 * @return DtoItemResponse
+	 */
+	public DtoItemReponse convertDtoItem(Item item) {
+		ModelMapper modelMapper =new ModelMapper();
+		return modelMapper.map(item, DtoItemReponse.class);
+		
+	}
+	
 	/*Servico para converte um dtoItem
 	 * @param DtoItemReponse  
 	 * convert um DtoItem.class para um DtoItemReponse.class
@@ -177,6 +188,7 @@ public class ItemService {
 		return modelMapper.map(dtoItem, DtoItemReponse.class);
 		
 	}
+	
 	
 	/*Servico para converte um Page<DtoItemReponse>
 	 * @param Page<Item>  
@@ -189,6 +201,7 @@ public class ItemService {
 		return modelMapper.map(item, targetListType);
 		
 	}
+	
 	
 
 	

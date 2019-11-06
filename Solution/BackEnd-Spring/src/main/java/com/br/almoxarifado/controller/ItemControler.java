@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,7 +78,7 @@ public class ItemControler {
 	})
 	
 	/*
-	 * @param String codigo
+	 * @param String codig
 	 * o metodo busca um item pel0 codigo
 	 * @return retorna o item buscado
 	 */
@@ -123,6 +124,14 @@ public class ItemControler {
 		}
 		return new ResponseEntity<>(dto,HttpStatus.OK);
 		
+	}
+	/* FALTA ADIONAR NO SWAGGER , HATEOS E TESTE DE INTEGRACAO */
+	
+	@PatchMapping()
+	public ResponseEntity<DtoItemReponse> updateItem(@RequestBody DtoItemRequest dtoRequest){
+		DtoItemReponse dtoItemResponse = null;
+		dtoItemResponse = this.service.update(this.service.convertDtoItem(dtoRequest));
+		return new ResponseEntity<>(dtoItemResponse,HttpStatus.NO_CONTENT);
 	}
 	
 	
