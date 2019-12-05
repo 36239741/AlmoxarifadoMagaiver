@@ -40,7 +40,7 @@ public class User implements Serializable {
 	private String nome;
 
 	@Email(message = "Formato Invalido")
-	@Size(max = 40)
+	@Size(max = 60)
 	@NotBlank(message = "E-mail em branco")
 	@Column(unique = true)
 	private String email;

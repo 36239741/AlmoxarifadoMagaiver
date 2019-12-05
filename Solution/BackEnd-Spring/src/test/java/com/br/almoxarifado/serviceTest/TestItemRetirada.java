@@ -45,7 +45,8 @@ public class TestItemRetirada extends AbstractIntegrationTest{
 		Page<ItemRetirada> pageItemRetirada = null;
 		pageItemRetirada = this.itemRetiradaService.findAll(0, 1);
 		Assert.assertNotNull(pageItemRetirada);
-		Assert.assertEquals(1, pageItemRetirada.getTotalElements());
+		System.out.println("QNT: " + pageItemRetirada.getNumberOfElements());
+		Assert.assertEquals(1, pageItemRetirada.getNumberOfElements());
 	}
 	
 
