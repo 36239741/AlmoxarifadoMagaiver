@@ -10,13 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity(name = "tbl_item_Entrada")
 @Data
 @NoArgsConstructor
@@ -35,7 +36,7 @@ public class ItemEntrada {
 	@NotBlank(message = "Campo Local Retirada nao foi preenchido")
 	private String localRetirada;
 	
-	@OneToMany(targetEntity = Item.class,fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Item.class,fetch = FetchType.EAGER)
 	@JoinTable(name = "tbl_item_entrada_list",
 	joinColumns  = @JoinColumn(name ="entrada_id"),
 	inverseJoinColumns = @JoinColumn(name = "item_id"))
