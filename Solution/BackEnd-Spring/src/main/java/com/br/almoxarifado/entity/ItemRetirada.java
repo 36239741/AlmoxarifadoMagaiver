@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class ItemRetirada {
 	@Id
 	@GeneratedValue
-	private long retirdaId;
+	private long retiradaId;
 	@NotNull(message = "Campo data nao foi preenchido")
 	private LocalDateTime data = LocalDateTime.now();
 	@NotNull(message = "Campo valor nao foi preenchido")

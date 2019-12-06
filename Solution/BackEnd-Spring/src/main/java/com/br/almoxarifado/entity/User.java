@@ -33,7 +33,7 @@ public class User implements Serializable {
 	@Id()
 	@GeneratedValue()
 	@Column(name = "user_id")
-	private Long id;
+	private long id;
 
 	@NotBlank(message = "Nome em branco")
 	@Size(max = 40)

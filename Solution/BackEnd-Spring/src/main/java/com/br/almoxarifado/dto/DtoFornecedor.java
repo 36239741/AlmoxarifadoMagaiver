@@ -20,7 +20,7 @@ public class DtoFornecedor extends ResourceSupport implements Serializable  {
 	private String email;
 	private List<DtoTelefone> telefone;
 	private String cep;
-	private String longadouro;
+	private String logradouro;
 	private int numero;
 	private String bairro;
 	private String nome;

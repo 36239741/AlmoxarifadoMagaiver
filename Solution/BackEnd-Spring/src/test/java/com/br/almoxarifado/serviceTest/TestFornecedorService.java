@@ -38,7 +38,8 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 	
 									/* TESTE DE PERSISTIR UM FORNECEDOR */
 	@Sql(scripts = {
-			"/dataset/truncateFornecedor.sql"
+			"/dataset/truncateFornecedor.sql",
+			"/dataset/fornecedor.sql"
 	})
 	@Test
 	public void testFornecedorSaveMustPass() {
@@ -73,10 +74,6 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 	}
 	
 							/* TESTE DE BUSCAR TODOS OS FORNECEDORES RETORNADO UMA PAGEABLE */
-	@Sql(scripts = {
-			"/dataset/truncateFornecedor.sql",
-			"/dataset/fornecedor.sql"
-	})
 	@Test
 	public void testFornecedorFindAllMustPass() {
 		/*ATRIBUTOS	*/
