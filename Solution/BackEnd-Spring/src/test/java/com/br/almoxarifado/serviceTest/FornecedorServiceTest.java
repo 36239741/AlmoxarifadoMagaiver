@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.TransactionSystemException;
 
-import com.br.almoxarifado.dto.DtoFornecedor;
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.entity.Telefone;
 import com.br.almoxarifado.enums.TipoTelefone;
@@ -30,7 +29,7 @@ import com.br.almoxarifado.service.FornecedorService;
 							
 /*TESTE*/
 
-public class TestFornecedorService extends AbstractIntegrationTest {
+public class FornecedorServiceTest extends AbstractIntegrationTest {
 	
 	@Autowired
 	private FornecedorService fornecedorService;
@@ -41,10 +40,10 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/truncateFornecedor.sql"
 	})
 	@Test
-	public void testFornecedorSaveMustPass() {
+	public void insertFornecedoresMustPassInserindoUmFornecedor() {
 		/*ATRIBUTOS	*/
 		Fornecedor fornecedor = new Fornecedor();
-		DtoFornecedor returnFornecedor= null;
+		Fornecedor returnFornecedor= null;
 		Telefone tel1 = new Telefone();
 		List<Telefone> list = new ArrayList<Telefone>();
 		
@@ -62,7 +61,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 		fornecedor.setNumero(875);
 		fornecedor.setPais("BR");
 		fornecedor.setTelefone(list);
-		returnFornecedor = this.fornecedorService.insertFornecedores(this.fornecedorService.convertFornecedor(fornecedor));
+		returnFornecedor = this.fornecedorService.saveFornecedor(fornecedor);
 		
 		/*TESTE*/
 		Assert.assertNotNull(returnFornecedor);
@@ -78,7 +77,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/fornecedor.sql"
 	})
 	@Test
-	public void testFornecedorFindAllMustPass() {
+	public void fornecedorFindAllMustPassBuscandoTodosFornecedores() {
 		/*ATRIBUTOS	*/
 		Page<Fornecedor> returnFornecedores = null;
 		
@@ -133,7 +132,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 	})
 	
 	@Test()
-	public void testFornecedorAtivaDesativaMustPass2() {
+	public void fornecedorAtivaDesativaAtivaFornecedorPeloNome() {
 		/*ATRIBUTOS	*/
 		Fornecedor fornecedor = new Fornecedor();
 		Telefone tel1 = new Telefone();
@@ -155,7 +154,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 		fornecedor.setPais("BR");
 		fornecedor.setFornecedorStatus(false);
 		fornecedor.setTelefone(list);
-		this.fornecedorService.insertFornecedores(this.fornecedorService.convertFornecedor(fornecedor));
+		this.fornecedorService.saveFornecedor(fornecedor);
 		this.fornecedorService.desativarOrAtivarFornecedor("Henrique");
 		findFornecedor = this.fornecedorService.findByNomeFornecedor("Henrique");
 		
@@ -174,10 +173,10 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/truncateFornecedor.sql"
 	})
 	@Test(expected = TransactionSystemException.class)
-	public void testFornecedorSaveMustFail() {
+	public void FornecedorSaveMustFailTenTandoCadastrarFornecedorComCampoStringVazio() {
 		/*ATRIBUTOS	*/
 		Fornecedor fornecedor = new Fornecedor();
-		DtoFornecedor returnFornecedor= null;
+		Fornecedor returnFornecedor= null;
 		Telefone tel1 = new Telefone();
 		List<Telefone> list = new ArrayList<Telefone>();
 		
@@ -195,7 +194,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 		fornecedor.setNumero(875);
 		fornecedor.setPais("BR");
 		fornecedor.setTelefone(list);
-		returnFornecedor = this.fornecedorService.insertFornecedores(this.fornecedorService.convertFornecedor(fornecedor));
+		returnFornecedor = this.fornecedorService.saveFornecedor(fornecedor);
 		
 		/*TESTE*/
 		Assert.assertNotNull(returnFornecedor);
@@ -211,7 +210,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/fornecedor.sql"
 	})
 	@Test(expected = DataIntegrityViolationException.class)
-	public void testFornecedorSaveMustFail2() {
+	public void FornecedorSaveMustFaillTestandoCadastrarComNomeDuplicado() {
 		/*ATRIBUTOS	*/
 		Fornecedor fornecedor = new Fornecedor();
 		Telefone tel1 = new Telefone();
@@ -231,7 +230,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 		fornecedor.setNumero(875);
 		fornecedor.setPais("BR");
 		fornecedor.setTelefone(list);
-		this.fornecedorService.insertFornecedores(this.fornecedorService.convertFornecedor(fornecedor));
+		this.fornecedorService.saveFornecedor(fornecedor);
 		
 		/*TESTE*/
 	}
@@ -242,7 +241,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/fornecedor.sql"
 	})
 	@Test(expected = IllegalArgumentException.class)
-	public void testFornecedorFindBynameMustFail() {
+	public void fornecedorFindBynameMustFailBuscandoFornecedorPorNomeExistente() {
 		/*ATRIBUTOS	*/
 		
 		
@@ -259,7 +258,7 @@ public class TestFornecedorService extends AbstractIntegrationTest {
 			"/dataset/fornecedor.sql"
 	})
 	@Test(expected = IllegalArgumentException.class)
-	public void testFornecedorAtivaDesativaMustFail() {
+	public void fornecedorAtivaDesativaMustFailDesativandoFornecedorComNomeExistente() {
 		/*ATRIBUTOS	*/
 		
 		

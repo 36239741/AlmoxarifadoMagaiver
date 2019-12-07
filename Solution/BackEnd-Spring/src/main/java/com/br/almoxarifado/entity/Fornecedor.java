@@ -28,7 +28,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter()
-@Entity(name = "tbl_fornecedor")
+@Entity
 public class Fornecedor  {	
 
 	/*
@@ -39,8 +39,7 @@ public class Fornecedor  {
 
 	@Id()
 	@GeneratedValue()
-	@Column(name = "fornecedor_id")
-	private long fornecedorId;
+	private long id;
 	
 	@Column(unique = true)
 	@NotBlank(message = "Nome em branco")
@@ -52,8 +51,8 @@ public class Fornecedor  {
 	private String email;
 	
 	@NotEmpty
-	@OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE},orphanRemoval = true)
-	@JoinColumn(name = "fornecedor_id")
+	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE},orphanRemoval = true)
+	@JoinColumn(name = "fk_fornecedor")
 	private List<Telefone> telefone;
 	
 	
@@ -92,7 +91,9 @@ public class Fornecedor  {
 		this.setNome(filterSpace);
 	}
 
-
+	public void listItemClear() {
+		this.item.clear();
+	}
 
 
 

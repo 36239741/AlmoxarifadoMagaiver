@@ -8,7 +8,7 @@ import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
 import com.br.almoxarifado.entity.TokenGenerate;
-import com.br.almoxarifado.entity.User;
+import com.br.almoxarifado.entity.Usuario;
 import com.br.almoxarifado.repository.UserRepository;
 
 @Service
@@ -17,7 +17,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public void saveUser(User user) {
+	public void saveUser(Usuario user) {
 		this.userRepository.save(user);
 	}
 	

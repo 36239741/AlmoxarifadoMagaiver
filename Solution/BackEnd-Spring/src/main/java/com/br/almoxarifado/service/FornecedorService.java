@@ -1,6 +1,5 @@
 package com.br.almoxarifado.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.br.almoxarifado.dto.DtoFornecedor;
-import com.br.almoxarifado.dto.DtoFornecedorItem;
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.repository.FornecedorRepository;
 
@@ -24,12 +21,12 @@ public class FornecedorService {
 	 * a funcao ira inserir um fornecedor 
 	 * @return return the save object
 	 */	
-	public DtoFornecedor insertFornecedores(DtoFornecedor dtoFornecedor) {
+	public Fornecedor saveFornecedor(Fornecedor fornecedor) {
 		Fornecedor returnFornecedores = null;
 		
-		returnFornecedores = this.repository.save(this.convertDtoFornecedor(dtoFornecedor));
+		returnFornecedores = this.repository.save(fornecedor);
 		
-		return this.convertFornecedor(returnFornecedores);
+		return returnFornecedores;
 				
 	}
 	
@@ -43,6 +40,7 @@ public class FornecedorService {
 		Page<Fornecedor> pageFornecedores;
 		PageRequest pageable = PageRequest.of(page, pageSize);
 		pageFornecedores = this.repository.findAll(pageable);
+		pageFornecedores.getContent().forEach(data -> data.listItemClear());
 		return pageFornecedores;
 	}
 
@@ -72,11 +70,11 @@ public class FornecedorService {
 		if (fornecedores != null) {
 
 			if (fornecedores.getFornecedorStatus()) {
-				 this.repository.fornecedorDesative(fornecedores.getFornecedorId());
+				 this.repository.fornecedorDesative(fornecedores.getId());
 				 returnStatus = false;
 			} 
 			else {
-				 this.repository.fornecedorActive(fornecedores.getFornecedorId());
+				 this.repository.fornecedorActive(fornecedores.getId());
 				 returnStatus = true;
 			}
 			
@@ -84,24 +82,7 @@ public class FornecedorService {
 		return returnStatus;
 	}
 
-							/* METODOS DE CONVERSAO DTO */
-	
-		public Fornecedor convertDtoFornecedor(DtoFornecedor dtoFornecedor) {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(dtoFornecedor, Fornecedor.class);
-		
-	}
-		public DtoFornecedor convertFornecedor(Fornecedor fornecedor) {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(fornecedor, DtoFornecedor.class);
-		
-	}
-		public DtoFornecedorItem convertFornecedorItem(Fornecedor fornecedor) {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(fornecedor, DtoFornecedorItem.class);
-		
-	}
-	
+
 
 
 

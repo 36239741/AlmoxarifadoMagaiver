@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.almoxarifado.entity.TokenGenerate;
-import com.br.almoxarifado.entity.User;
+import com.br.almoxarifado.entity.Usuario;
 import com.br.almoxarifado.repository.TokenRepository;
 
 @Service
@@ -17,10 +17,10 @@ public class TokenService {
 	@Autowired
 	private TokenRepository repository;
 
-	public UUID tokenGenerate(User user) {
+	public UUID tokenGenerate(Usuario user) {
 		TokenGenerate token = new TokenGenerate();
 		TokenGenerate returnToken = null;
-		token.setUserId(user);
+		token.setUsuario(user);
 		token.setTempoExpiracao(this.tokenDataExpiracao());
 		returnToken = this.repository.save(token);
 		return returnToken.getToken();

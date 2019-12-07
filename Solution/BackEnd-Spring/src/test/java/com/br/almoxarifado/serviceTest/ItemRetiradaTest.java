@@ -13,7 +13,7 @@ import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.service.ItemRetiradaService;
 import com.br.almoxarifado.service.ItemService;
 
-public class TestItemRetirada extends AbstractIntegrationTest{
+public class ItemRetiradaTest extends AbstractIntegrationTest{
 	
 	@Autowired
 	private ItemRetiradaService itemRetiradaService;

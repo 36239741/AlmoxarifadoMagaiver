@@ -1,2 +1,1 @@
-TRUNCATE tbl_fornecedor CASCADE;
-
+TRUNCATE fornecedor CASCADE;

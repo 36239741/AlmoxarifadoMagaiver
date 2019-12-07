@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "tbl_token")
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,13 +23,13 @@ public class TokenGenerate {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User userId;
+
 	private UUID token = UUID.randomUUID();
 	@Column(name = "tempo_expiracao")
 	private LocalDateTime tempoExpiracao;
 	@Column(name = "token_status")
 	private Boolean tokenStatus = true;
-
+	
+	@ManyToOne(targetEntity = Usuario.class, fetch = FetchType.LAZY)
+	private Usuario usuario;
 }

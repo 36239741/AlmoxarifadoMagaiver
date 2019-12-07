@@ -1,12 +1,5 @@
 package com.br.almoxarifado.controller;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.util.List;
-
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.almoxarifado.dto.DtoFornecedor;
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.service.FornecedorService;
 
@@ -39,9 +31,9 @@ public class FornecedorController {
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
 	 */
-	@ApiOperation(value = "Busca um fornecedor", response = DtoFornecedor.class, notes = "Essa operacao busca um fornecedor pelo nome informado")
+	@ApiOperation(value = "Busca um fornecedor", response = Fornecedor.class, notes = "Essa operacao busca um fornecedor pelo nome informado")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "retorna um Fornecedor com uma mensagem de sucesso", response = DtoFornecedor.class),
+			@ApiResponse(code = 200, message = "retorna um Fornecedor com uma mensagem de sucesso", response = Fornecedor.class),
 			@ApiResponse(code = 500, message = "Caso nao for encontrado nenhum fornecedor sera lancado um exception com o erro") })
 	/*
 	 * @param String name o metodo retorna o fornecedor que foi byscado pelo nome
@@ -49,18 +41,16 @@ public class FornecedorController {
 	 * @return o Fornecedor Buscado
 	 */
 	@GetMapping(path = "/{name}")
-	public ResponseEntity<DtoFornecedor> findFonecedoresByName(@Validated @PathVariable String name) {
-		Fornecedor fornecedores = null;
-		fornecedores = this.service.findByNomeFornecedor(name);
-		DtoFornecedor dto = this.service.convertFornecedor(fornecedores);
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+	public ResponseEntity<Fornecedor> findFonecedoresByName(@Validated @PathVariable String name) {
+		Fornecedor fornecedor = this.service.findByNomeFornecedor(name);
+		return ResponseEntity.ok(fornecedor);
 	}
 
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
 	 */
 
-	@ApiOperation(value = "Busca todos fornecedores", response = DtoFornecedor.class, notes = "Essa operacao retorna uma Page de  todos os fornecedores")
+	@ApiOperation(value = "Busca todos fornecedores", response = Fornecedor.class, notes = "Essa operacao retorna uma Page de  todos os fornecedores")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "retorna uma lista de Fornecedor com uma mensagem de sucesso", response = Fornecedor.class),
 			@ApiResponse(code = 400, message = "Caso nao for encontrado nenhum fornecedor sera lancado um exception com o erro") })
@@ -71,30 +61,17 @@ public class FornecedorController {
 	 * @return retorna uma page de fornecedores
 	 */
 	@GetMapping
-	public ResponseEntity<List<DtoFornecedor>> findAll(@RequestParam(value = "page", required = true) Integer page,
+	public ResponseEntity<Page<Fornecedor>> findAll(@RequestParam(value = "page", required = true) Integer page,
 			@RequestParam(value = "size", required = true) Integer size) {
-		Page<Fornecedor> resultPage = null;
-		List<DtoFornecedor> dto = null;
-		resultPage = this.service.findAll(page, size);
-		ModelMapper modelMapper = new ModelMapper();
-		java.lang.reflect.Type targetListType = new TypeToken<List<DtoFornecedor>>() {}.getType();
-		dto = modelMapper.map(resultPage.getContent(), targetListType);
-		
-		for (DtoFornecedor forn : dto) {
-			String nome = forn.getNome();
-			forn.add(linkTo(methodOn(FornecedorController.class).findFonecedoresByName(nome)).withSelfRel()
-					.withRel("Find by name").withType("GET"));
-			forn.add(linkTo(methodOn(FornecedorController.class).ativarFornecedores(nome)).withSelfRel()
-					.withRel("Active or desative by name").withType("PATCH"));
-		}
-		
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		Page<Fornecedor> pageFornecedor = null;
+		pageFornecedor = this.service.findAll(page, size);
+		return new ResponseEntity<>(pageFornecedor, HttpStatus.OK);
 	}
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
 	 */
 
-	@ApiOperation(value = "Salva um fornecedor", response = DtoFornecedor.class, notes = "Essa operacao retorna o fornecedor salvo")
+	@ApiOperation(value = "Salva um fornecedor", response = Fornecedor.class, notes = "Essa operacao retorna o fornecedor salvo")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Retorna o fornecedor salvo com uma mensagem de sucesso", response = Fornecedor.class),
 			@ApiResponse(code = 400, message = "Caso for encotrado algum erro no resquest sera lancado um exception") })
@@ -104,20 +81,17 @@ public class FornecedorController {
 	 * @return Fornecedor
 	 */
 	@PostMapping()
-	public ResponseEntity<DtoFornecedor> saveFornecedores(@Validated @RequestBody DtoFornecedor fornecedores) {
-		DtoFornecedor returnFornecedores = null;
-		ModelMapper modelMapper = new ModelMapper();
-		DtoFornecedor dto =  modelMapper.map(fornecedores, DtoFornecedor.class);
-		returnFornecedores = this.service.insertFornecedores(dto);
-		return new ResponseEntity<>(returnFornecedores, HttpStatus.CREATED);
+	public ResponseEntity<Fornecedor> saveFornecedores(@Validated @RequestBody Fornecedor fornecedor) {
+		Fornecedor returnFornecedores = this.service.saveFornecedor(fornecedor);
+		return ResponseEntity.ok(returnFornecedores);
 	}
 	/*
 	 * CONFIGURACOES DE DOCUMENTACAO DO SWAGGER
 	 */
 
-	@ApiOperation(value = "Faz o update na classe por completo", response = DtoFornecedor.class, notes = "Essa operacao retorna o fornecedor salvo")
+	@ApiOperation(value = "Faz o update na classe por completo", response = Fornecedor.class, notes = "Essa operacao retorna o fornecedor salvo")
 	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "Retorna o fornecedor que foi feito o update", response = DtoFornecedor.class),
+			@ApiResponse(code = 204, message = "Retorna o fornecedor que foi feito o update", response = Fornecedor.class),
 			@ApiResponse(code = 500, message = "Caso nao for encontrado o fornecedor que deseja atualizar sera lancado um exception") })
 	/*
 	 * @param Fornecedor esse metodo faz um update na classe fornecedor por completo
@@ -125,9 +99,9 @@ public class FornecedorController {
 	 * @return Fornecedor
 	 */
 	@PutMapping()
-	public ResponseEntity<DtoFornecedor> updateFornecedores(@Validated @RequestBody DtoFornecedor fornecedores) {
-		DtoFornecedor returnFornecedores = null;
-		returnFornecedores = this.service.insertFornecedores(fornecedores);
+	public ResponseEntity<Fornecedor> updateFornecedores(@Validated @RequestBody Fornecedor fornecedores) {
+		Fornecedor returnFornecedores = null;
+		returnFornecedores = this.service.saveFornecedor(fornecedores);
 		return new ResponseEntity<>(returnFornecedores, HttpStatus.NO_CONTENT);
 	}
 	/*

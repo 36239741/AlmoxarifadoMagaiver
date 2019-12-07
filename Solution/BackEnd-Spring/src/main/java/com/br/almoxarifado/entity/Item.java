@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "tbl_item")
+@Entity
 public class Item   {
 	/**
 	 * 
@@ -28,8 +28,8 @@ public class Item   {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "item_id")
-	private long itemId;
+	private long Id;
+	
 	@NotNull(message = "Nenhum codigo gerado")
 	@Column(unique = true)
 	private String codigo;
@@ -44,12 +44,12 @@ public class Item   {
 	@NotNull(message = "Nenhum valor inserido")
 	private Double valor;
 	
-	@ManyToOne(fetch = FetchType.LAZY,optional = false,targetEntity = Fornecedor.class)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false,targetEntity = Fornecedor.class)
 	private Fornecedor fornecedor;
 	
 	@Column(name = "item_status")
 	private Boolean itemStatus = true;
 	
-		
+
 
 }

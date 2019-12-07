@@ -17,14 +17,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "tbl_Item_Retirada")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemRetirada {
 	@Id
 	@GeneratedValue
-	private long retirdaId;
+	private long id;
 	@NotNull(message = "Campo data nao foi preenchido")
 	private LocalDateTime data = LocalDateTime.now();
 	@NotNull(message = "Campo valor nao foi preenchido")

@@ -3,17 +3,17 @@ package com.br.almoxarifado.serviceTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.br.almoxarifado.entity.User;
+import com.br.almoxarifado.entity.Usuario;
 import com.br.almoxarifado.service.UserService;
 
-public class TestUserService extends AbstractIntegrationTest{
+public class UserServiceTest extends AbstractIntegrationTest{
 	
 	@Autowired
 	private UserService userService;
 	
 	@Test()
 	public void userServiceSaveMustPass() {
-		User user = new User();
+		Usuario user = new Usuario();
 		user.setNome("henrique");
 		user.setEmail("henrique_nitatori@hotmail.com");
 		user.setSenha("123213123123");

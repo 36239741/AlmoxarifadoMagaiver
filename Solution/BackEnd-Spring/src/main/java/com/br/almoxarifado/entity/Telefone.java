@@ -1,11 +1,12 @@
 package com.br.almoxarifado.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -22,7 +23,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_telefone")
+@Entity
 public class Telefone   {
 
 	/**
@@ -32,7 +33,6 @@ public class Telefone   {
 
 	@Id
 	@GeneratedValue()
-	@Column(name = "telefone_id")
 	private long id;
 
 	@Enumerated(EnumType.ORDINAL)

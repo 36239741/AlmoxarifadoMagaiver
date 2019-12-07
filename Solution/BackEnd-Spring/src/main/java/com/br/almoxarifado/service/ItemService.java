@@ -2,8 +2,6 @@ package com.br.almoxarifado.service;
 
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import com.br.almoxarifado.dto.DtoItemReponse;
-import com.br.almoxarifado.dto.DtoItemRequest;
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.error.ExistingItemException;
 import com.br.almoxarifado.repository.ItemRepository;
@@ -51,10 +47,9 @@ public class ItemService {
 	 * @return retornara o DtoItem persistido
 	 */
 	
-	public DtoItemRequest insert(DtoItemRequest item) {
+	public Item saveItem(Item item) {
 		Item findByIdItem = null;
 		Item itemPersist = null;
-		Item convertItem = this.convertDtoItem(item);
 		
 		findByIdItem = this.findByDescricao(item.getDescricao());
 		if(findByIdItem != null) {
@@ -62,24 +57,17 @@ public class ItemService {
 				throw new ExistingItemException("Estem item: "+ findByIdItem.getDescricao() +" ja esta cadastrado");
 			}
 			else {
-				itemPersist =  this.gerarCodigoItem(convertItem);
+				itemPersist =  this.gerarCodigoItem(item);
 			}
 		}
 		else {
-			itemPersist = this.gerarCodigoItem(convertItem);
+			itemPersist = this.gerarCodigoItem(item);
 		}
 			
-		return this.convertItem(itemPersist);
+		return itemPersist;
 	}
 
-	/*
-	 * servico de update
-	 * @param Item realizara o update do item
-	 * @return Item que foi modificado
-	 */
-	public DtoItemReponse update(Item item) {
-		return this.convertDtoItem(item);
-	}
+
 
 	/**
 	 * Serviço buscar um item pela descricao
@@ -101,11 +89,11 @@ public class ItemService {
 	 * @return Item
 	 */
 	@Transactional(readOnly = true)
-	public Page<DtoItemReponse> findAllIten(int page, int size){
+	public Page<Item> findAllItem(int page, int size){
 	Page<Item> pageItens;
 	PageRequest pageable = PageRequest.of(page,size);
 	pageItens = this.repository.findAll(pageable);
-	return this.convertPageItem(pageItens);
+	return pageItens;
 	}
 	
 	/**
@@ -144,64 +132,12 @@ public class ItemService {
 		
 		return itemPersist;
 	}
+	
+	public Page<Item> itemFilter(String codigo, String descricao, String localArmazenamento, PageRequest pageable) {
+		return this.repository.findByFilters(codigo, descricao, localArmazenamento, pageable);
+	}
 
-	/*Servico para conveter um item
-	 * @param item 
-	 *  convert um item.class para um DtoItem.class
-	 * @return DtoItem
-	 */
-	public DtoItemRequest convertItem(Item item) {
-		ModelMapper modelMapper =new ModelMapper();
-		return modelMapper.map(item, DtoItemRequest.class);
-		
-	}
-	
-	/*Servico para converte um dtoItem
-	 * @param DtoItem  
-	 * convert um DtoItem.class para um Item.class
-	 * @return Item
-	 */
-	public Item convertDtoItem(DtoItemRequest dtoItem) {
-		ModelMapper modelMapper =new ModelMapper();
-		return modelMapper.map(dtoItem, Item.class);
-		
-	}
-	
-	/*Servico para converte um Item
-	 * @param DtoItemResonse
-	 * convert um Item.class para um DtoItemReponse.class
-	 * @return DtoItemResponse
-	 */
-	public DtoItemReponse convertDtoItem(Item item) {
-		ModelMapper modelMapper =new ModelMapper();
-		return modelMapper.map(item, DtoItemReponse.class);
-		
-	}
-	
-	/*Servico para converte um dtoItem
-	 * @param DtoItemReponse  
-	 * convert um DtoItem.class para um DtoItemReponse.class
-	 * @return DtoItemReponse
-	 */
-	public DtoItemReponse convertDtoItemResponse(DtoItemRequest dtoItem) {
-		ModelMapper modelMapper =new ModelMapper();
-		return modelMapper.map(dtoItem, DtoItemReponse.class);
-		
-	}
-	
-	
-	/*Servico para converte um Page<DtoItemReponse>
-	 * @param Page<Item>  
-	 * convert um Page<Item>  para um Page<DtoItemReponse>
-	 * @return Page<DtoItemReponse>
-	 */
-	public Page<DtoItemReponse> convertPageItem(Page<Item> item) {
-		ModelMapper modelMapper =new ModelMapper();
-		java.lang.reflect.Type targetListType = new TypeToken<Page<DtoItemReponse>>() {}.getType();
-		return modelMapper.map(item, targetListType);
-		
-	}
-	
+
 	
 
 	

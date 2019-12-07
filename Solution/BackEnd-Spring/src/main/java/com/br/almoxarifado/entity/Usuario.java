@@ -26,13 +26,12 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tbl_user")
-public class User implements Serializable {
+@Entity
+public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id()
 	@GeneratedValue()
-	@Column(name = "user_id")
 	private Long id;
 
 	@NotBlank(message = "Nome em branco")
@@ -56,6 +55,7 @@ public class User implements Serializable {
 	@Column(name = "status_conta")
 	private boolean statusConta = false;
 	
+	private boolean userStatus = true;
 	
 	private String token;
 	

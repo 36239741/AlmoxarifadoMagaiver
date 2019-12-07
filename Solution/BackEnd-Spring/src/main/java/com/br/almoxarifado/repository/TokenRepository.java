@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import com.br.almoxarifado.entity.TokenGenerate;
 @Repository
 public interface TokenRepository extends JpaRepository<TokenGenerate, Long> {
-	@Query(value = "SELECT * FROM tbl_token WHERE token = ?1",nativeQuery = true)
+	@Query(value = "SELECT * FROM token WHERE token = ?1",nativeQuery = true)
 	TokenGenerate findToken(UUID token);
 	@Modifying
-	@Query(value = "UPDATE tbl_token SET token_status = 'false' WHERE token = ?1")
+	@Query(value = "UPDATE TokenGenerate token SET token.tokenStatus = 'false' WHERE token = ?1")
 	void desativeToken(UUID token);
 }
