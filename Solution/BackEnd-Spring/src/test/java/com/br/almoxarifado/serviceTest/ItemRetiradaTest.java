@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemRetirada;
@@ -22,6 +23,10 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	private ItemService itemService; 
 	
 	
+	@Sql(scripts = {
+			"/dataset/truncateItemRetirada.sql",
+			"/dataset/itemRetirada.sql",
+	})
 	@Test
 	public void itemRetiradaSaveMustPass() {
 		ItemRetirada itemRetirada = new ItemRetirada();
@@ -45,7 +50,8 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 		Page<ItemRetirada> pageItemRetirada = null;
 		pageItemRetirada = this.itemRetiradaService.findAll(0, 1);
 		Assert.assertNotNull(pageItemRetirada);
-		Assert.assertEquals(1, pageItemRetirada.getTotalElements());
+		System.out.println("QNT: " + pageItemRetirada.getTotalElements());
+		Assert.assertEquals(3, pageItemRetirada.getTotalElements());
 	}
 	
 

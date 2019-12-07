@@ -1,0 +1,2 @@
+TRUNCATE usuario CASCADE;
+
