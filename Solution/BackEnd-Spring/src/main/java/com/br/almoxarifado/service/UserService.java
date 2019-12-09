@@ -20,9 +20,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public Usuario saveUser(Usuario user) {
-		return this.userRepository.save(user);
-	}
+	
 	
 	/*
 	 * @param Users
@@ -81,6 +79,7 @@ public class UserService {
 		Usuario users = null;
 		Boolean returnStatus = null;
 		users = this.findUserByEmail(email);
+		
 		if (users != null) {
 
 			if (users.isStatusConta()) {
