@@ -18,12 +18,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "tbl_item_Entrada")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemEntrada {
 	@Id
+	@GeneratedValue
+	private long id;
+	
 	@GeneratedValue
 	private long entradaId;
 	@NotNull(message = "Campo data nao foi preenchido")
@@ -33,8 +36,8 @@ public class ItemEntrada {
 	@NotNull(message = "Campo quantidade nao foi preenchido")
 	private int quantidade;
 	
-	@NotBlank(message = "Campo Local Retirada nao foi preenchido")
-	private String localRetirada;
+	@NotBlank(message = "Campo Local Entrada nao foi preenchido")
+	private String localEntrada;
 	
 	@ManyToOne(targetEntity = Item.class,fetch = FetchType.EAGER)
 	@JoinTable(name = "tbl_item_entrada_list",
@@ -42,5 +45,7 @@ public class ItemEntrada {
 	inverseJoinColumns = @JoinColumn(name = "item_id"))
 	private List<Item> listItem;
 	
-	
+	public void listItemClear() {
+		this.listItem.clear();
+	}
 }

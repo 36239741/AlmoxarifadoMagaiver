@@ -162,7 +162,13 @@ public class ItemService {
 
 			this.repository.save(returnItem);
 		}
+<<<<<<< HEAD
 		return itemSemEstoque;
+=======
+		else if(operacao.equals("entrada")) {
+			this.repository.entradaEstoque(codigo, quantidade);
+		}
+>>>>>>> 381fa39dc774f3b11bceaf01385d822ecbda26c0
 		
 	}
 
