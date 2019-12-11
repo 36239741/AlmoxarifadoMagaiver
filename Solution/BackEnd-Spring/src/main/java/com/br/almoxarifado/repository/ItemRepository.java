@@ -29,7 +29,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 			@Param("localArmazenamento") String localArmazenamento,
 			Pageable pageable);
 	
-	@Query(value = "UPDATE item SET quantidade = quantidade+?2 WHERE codigo=?1")
+	@Query(value = "UPDATE item SET quantidade = quantidade+?2 WHERE codigo=?1", nativeQuery = true)
 	Item retiraEstoque(String codigo, int quantidade);
 	
 }
