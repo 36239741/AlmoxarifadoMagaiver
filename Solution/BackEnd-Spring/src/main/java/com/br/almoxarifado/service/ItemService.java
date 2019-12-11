@@ -143,6 +143,10 @@ public class ItemService {
 		if(operacao.equals("saida")) {
 			this.repository.retiraEstoque(codigo, quantidade);
 		}
+		else if(operacao.equals("entrada")) {
+			this.repository.entradaEstoque(codigo, quantidade);
+		}
+		
 	}
 
 	

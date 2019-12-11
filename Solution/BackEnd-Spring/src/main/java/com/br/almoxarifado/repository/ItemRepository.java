@@ -32,4 +32,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query(value = "UPDATE item SET quantidade = quantidade+?2 WHERE codigo=?1", nativeQuery = true)
 	Item retiraEstoque(String codigo, int quantidade);
 	
+	@Query(value = "UPDATE item SET quantidade = quantidade+?2 WHERE codigo=?1", nativeQuery = true)
+	Item entradaEstoque(String codigo, int quantidade);
+	
 }
