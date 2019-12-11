@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -55,7 +57,7 @@ public class Fornecedor  {
 	@JoinColumn(name = "fk_fornecedor")
 	private List<Telefone> telefone;
 	
-	
+	@JsonIgnoreProperties("fornecedor")
 	@OneToMany(targetEntity = Item.class,mappedBy = "fornecedor",fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.REMOVE,CascadeType.PERSIST},orphanRemoval = true)
 	private List<Item> item;
 	

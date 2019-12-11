@@ -2,6 +2,7 @@ package com.br.almoxarifado.serviceTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.springframework.transaction.TransactionSystemException;
 
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.entity.Item;
+import com.br.almoxarifado.entity.ItemRetirada;
+import com.br.almoxarifado.entity.Servico;
 import com.br.almoxarifado.entity.Telefone;
 import com.br.almoxarifado.enums.TipoTelefone;
 import com.br.almoxarifado.error.ExistingItemException;
@@ -103,6 +106,27 @@ public class ItemServiceTest extends AbstractIntegrationTest {
 	Assert.assertEquals("Switch 3750", returnItem2.getDescricao());
 	Assert.assertEquals("Shumodramo", returnItem2.getLocalArmazenamento());
 
+}
+	/*TESTE QUE VERIFICA A ATUALIZACAO DO ESTOQUE DOS ITENS*/
+	@Sql(scripts = {
+			"/dataset/truncateItem.sql",
+			"/dataset/item.sql"
+			
+	})
+	@Test
+	public void atualizarEstoqueMustPassAtualizandoOEstoqueDeUmItem() {
+		ItemRetirada itemRetirada = new ItemRetirada();
+		final Integer quantidade = 37;
+		Item returnItem =null;  
+		Item item =this.ItemRepository.findByCodigo("1234567");
+		itemRetirada.getListItem().add(item);
+		itemRetirada.setLocalRetirada("Almoxarifado");
+		itemRetirada.setQuantidade(3);
+		itemRetirada.setValor(45.00);
+	this.service.atualizaEstoque(itemRetirada,Servico.RETIRADA);
+	returnItem = this.ItemRepository.findByCodigo("1234567");
+	Assert.assertEquals(quantidade , returnItem.getQuantidade());
+	
 }
 	@Sql(scripts = {
 	"/dataset/truncateItem.sql",

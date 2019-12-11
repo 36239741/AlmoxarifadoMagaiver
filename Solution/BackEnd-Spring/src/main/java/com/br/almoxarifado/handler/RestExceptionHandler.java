@@ -1,182 +1,182 @@
 package com.br.almoxarifado.handler;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.logging.Logger;
 
-import javax.persistence.RollbackException;
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.hibernate.exception.ConstraintViolationException;
+import org.postgresql.util.PSQLException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Component;
 
-import com.br.almoxarifado.error.ErrorDetails;
 import com.br.almoxarifado.error.ExistingItemException;
 
-	@ControllerAdvice
-public class RestExceptionHandler {
-	@ExceptionHandler(ExistingItemException.class)
-	public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ExistingItemException rfnException){
-		ErrorDetails rfnDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.NOT_FOUND.value())
-		.title("Resource Not Found")
-		.detail(rfnException.getMessage())
-		.developerMessage(rfnException.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(rfnDetails,HttpStatus.NOT_FOUND);
+
+
+@Aspect
+@Component
+public class RestExceptionHandler
+{
+	/**
+	 *
+	 */
+	private static final Logger LOG = Logger.getLogger( RestExceptionHandler.class.getName() );
+
+	/*-------------------------------------------------------------------
+	 * 		 					ATTRIBUTES
+	 *-------------------------------------------------------------------*/
+	/**
+	 *
+	 */
+
+	/*-------------------------------------------------------------------
+	 * 		 					  ASPECTS
+	 *-------------------------------------------------------------------*/
+	//---------
+	// Database
+	//---------
+
+	/**
+	 * @param joinPoint
+	 * @param exception
+	 */
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, org.springframework.dao.DuplicateKeyException exception )
+	{
+		throw new DuplicateKeyException( "Chave primário duplicada." );
 	}
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ErrorDetails> handleDataIntegrityViolationException(DataIntegrityViolationException divException){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.BAD_REQUEST.value())
-		.title(HttpStatus.BAD_REQUEST.name())
-		.detail("Ja existe um Fornecedor cadastrado com esse nome")
-		.developerMessage(divException.getRootCause().getMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
-	}
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(MethodArgumentNotValidException rException){
-        BindingResult result = rException.getBindingResult();
-        List<org.springframework.validation.FieldError> fieldErrors = result.getFieldErrors();
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.UNPROCESSABLE_ENTITY.value())
-		.title(HttpStatus.UNPROCESSABLE_ENTITY.name())
-		.fields(this.getFildDefaultMessage(fieldErrors))
-		.developerMessage(rException.getMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.UNPROCESSABLE_ENTITY);
-	}
-	@ExceptionHandler(RollbackException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(RollbackException bException){
-		Set<ConstraintViolation<?>> violations = ((ConstraintViolationException)bException.getCause()).getConstraintViolations();
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.BAD_REQUEST.value())
-		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(this.getFildRollBack(violations))
-		.developerMessage(bException.getCause().initCause(bException).getLocalizedMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
-	}
-	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(HttpRequestMethodNotSupportedException httpMNSException){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.METHOD_NOT_ALLOWED.value())
-		.title(HttpStatus.METHOD_NOT_ALLOWED.name())
-		.detail(httpMNSException.getMethod())
-		.developerMessage(httpMNSException.getMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.METHOD_NOT_ALLOWED);
-	}
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(MissingServletRequestParameterException msrPexception){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.BAD_REQUEST.value())
-		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(msrPexception.getParameterName())
-		.developerMessage(msrPexception.getMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
-	}
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(IllegalArgumentException iaExcption){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(iaExcption.getMessage())
-		.developerMessage(iaExcption.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMediaTypeNotSupportedException hmtnsExcption){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
-		.title(HttpStatus.UNSUPPORTED_MEDIA_TYPE.name())
-		.detail(hmtnsExcption.getMessage())
-		.developerMessage(hmtnsExcption.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.UNSUPPORTED_MEDIA_TYPE);
-	}
-	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(InvalidDataAccessApiUsageException hmtnExcption){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(hmtnExcption.getCause().getMessage())
-		.developerMessage(hmtnExcption.getMessage())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	@ExceptionHandler(NullPointerException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(NullPointerException npExcption){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-		.title(HttpStatus.INTERNAL_SERVER_ERROR.name())
-		.detail(npExcption.getMessage())
-		.developerMessage(npExcption.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMessageNotReadableException hmnrException){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.BAD_REQUEST.value())
-		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(hmnrException.getMessage())
-		.developerMessage(hmnrException.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
-	}
-	@ExceptionHandler(HttpMessageConversionException.class)
-	public ResponseEntity<ErrorDetails> handleRollbackException(HttpMessageConversionException hmcException){
-		ErrorDetails divDetails = ErrorDetails.builder()
-		.timeStemp(LocalDateTime.now())
-		.status(HttpStatus.BAD_REQUEST.value())
-		.title(HttpStatus.BAD_REQUEST.name())
-		.detail(hmcException.getMessage())
-		.developerMessage(hmcException.getClass().getSimpleName())
-		.build();
-		return new ResponseEntity<>(divDetails,HttpStatus.BAD_REQUEST);
-	}
-	private List<String> getFildDefaultMessage(List<FieldError> fieldErrors) {
-		List<String> fieldErrorsList = new ArrayList<>();
-        for (org.springframework.validation.FieldError fieldError: fieldErrors) {
-        	fieldErrorsList.add(fieldError.getDefaultMessage());
-            
-        }
-        return fieldErrorsList;
-	}
-	private String getFildRollBack(Set<ConstraintViolation<?>> constraint){
-		String fild = null;
-		for (ConstraintViolation v : constraint) {	
-			fild = v.getMessageTemplate();
+
+	/**
+	 * Trata exceções geradas pelo Hibernate antes de enviar para o banco
+	 *
+	 * @param joinPoint
+	 * @param exception
+	 */
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, javax.validation.ConstraintViolationException exception )
+	{
+		ArrayList<String> messages = new ArrayList<>();
+		for ( ConstraintViolation<?> constraint : exception.getConstraintViolations() )
+		{
+			String annotationType = constraint.getConstraintDescriptor().getAnnotation().annotationType().getName();
+			String attributeLabel = constraint.getPropertyPath().toString();
+			switch ( annotationType )
+			{
+				case "javax.validation.constraints.NotNull":
+					messages.add("O campo "+ attributeLabel +" não pode ser nullo.");
+					break;
+				case "org.hibernate.validator.constraints.NotEmpty":
+					messages.add("O campo "+ attributeLabel +" não pode ser vazio.");
+					break;
+				case "org.hibernate.validator.constraints.Length":
+					messages.add("O campo "+ attributeLabel +" deve ter no máximo " + constraint.getConstraintDescriptor().getAttributes().get( "max" ) + " caracteres.");
+					break;
+				case "javax.validation.constraints.Size":
+					messages.add("O campo "+ attributeLabel +" deve ter no máximo " + constraint.getConstraintDescriptor().getAttributes().get( "max" ) + " dígitos.");
+					break;
+			}
 		}
-		return fild;
+
+		throw new ValidationException( String.join( "\n", messages ), exception );
+	}
+
+
+	/**
+	 * @param joinPoint
+	 * @param exception
+	 */
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, org.springframework.dao.EmptyResultDataAccessException exception )
+	{
+		throw new EmptyResultDataAccessException( "Nenhum resultado encontrado", 1 );
+	}
+	
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, ExistingItemException exception )
+	{
+		throw new ExistingItemException( exception.getMessage() );
+	}
+
+	/**
+	 * Trata exceções de Constraint geradas pelo PostgreSQL
+	 *
+	 * @param joinPoint
+	 * @param exception
+	 */
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, org.springframework.dao.DataIntegrityViolationException exception )
+	{
+		//Caso a exceção já tenha sido interceptada por outro Aspecto deve ser ignorada
+		if ( exception.getStackTrace()[0].toString().contains( "ExceptionHandlerAspect" ) || exception.getCause() == null )
+		{
+			return;
+		}
+
+		if ( exception.getCause() instanceof ConstraintViolationException )
+		{
+			final ConstraintViolationException cause = (ConstraintViolationException) exception.getCause();
+			final PSQLException sqlException = (PSQLException) cause.getSQLException();
+
+			final String message = sqlException.getServerErrorMessage().getDetail();
+
+			String key;
+			//Verifica o código do erro gerado pelo PostgreSQL
+			switch ( cause.getSQLState() )
+			{
+				case "23503": // foreign_key_violation
+				{
+					key = message.substring( message.indexOf( '"' ) + 1, message.indexOf( '.' ) - 1 );
+					throw new DataIntegrityViolationException( "Não foi possível realizar a operação pois esse registro está referenciado em " + key );
+				}
+				case "23505": // unique_violation
+				{
+					key = message.substring( message.indexOf( '(' ) + 1, message.indexOf( ')' ) );
+					if ( key.startsWith( "lower(" ) )
+					{
+						key = key.replace( "lower(", "" );
+						key = key.replace( "::text", "" );
+					}
+					throw new DataIntegrityViolationException( "O campo " + key + " informado já existe." );
+				}
+				case "23502": // not_null_violation
+				{
+					LOG.info( message );
+					LOG.info( "Not null violation." );
+					key = cause.getConstraintName();
+					throw new DataIntegrityViolationException( "Por favor preencha o campo " + key );
+				}
+				default:
+				{
+					throw new DataIntegrityViolationException( "O campo " + cause.getSQLState() + " já existe." );
+				}
+			}
+		}
+
+		throw new DataIntegrityViolationException( "Não foi possível realizar a operação pois ocorreu um problema de integridade nos dados." );
+	}
+
+	//---------
+	// Segurança
+	//---------
+
+	/**
+	 * Trata exceções de acesso negado
+	 *
+	 * @param joinPoint
+	 * @param exception
+	 * @throws AccessDeniedException 
+	 */
+	@AfterThrowing(pointcut = "within(@org.springframework.stereotype.Service *)", throwing = "exception")
+	public void handleException( JoinPoint joinPoint, org.springframework.security.access.AccessDeniedException exception ) throws AccessDeniedException
+	{
+		throw new AccessDeniedException( "Acesso negado." );
 	}
 }

@@ -1,6 +1,7 @@
 package com.br.almoxarifado.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -25,9 +26,6 @@ public class ItemRetirada {
 	@Id
 	@GeneratedValue
 	private long id;
-	
-	@GeneratedValue
-	private long retirada_id;
 
 	@NotNull(message = "Campo data nao foi preenchido")
 	private LocalDateTime data = LocalDateTime.now();
@@ -39,11 +37,12 @@ public class ItemRetirada {
 	@NotBlank(message = "Campo Local Retirada nao foi preenchido")
 	private String localRetirada;
 	
+	private String quemRetirou;
+	
+	private Boolean retiradaStatus = true;
+	
 	@OneToMany(targetEntity = Item.class,fetch = FetchType.EAGER)
-	@JoinTable(name = "tbl_item_retirada_list",
-	joinColumns  = @JoinColumn(name ="retirada_id"),
-	inverseJoinColumns = @JoinColumn(name = "item_id"))
-	private List<Item> listItem;
+	private List<Item> listItem = new ArrayList();
 	
 	public void listItemClear() {
 		this.listItem.clear();
