@@ -24,6 +24,8 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	
 	
 	@Sql(scripts = {
+			"/dataset/truncateItem.sql",
+			"/dataset/item.sql",
 			"/dataset/truncateItemRetirada.sql",
 			"/dataset/itemRetirada.sql",
 	})
@@ -45,14 +47,32 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 		
 	}
 	
+	@Sql(scripts = {
+			"/dataset/truncateItemRetirada.sql",
+			"/dataset/itemRetirada.sql",
+	})
 	@Test
 	public void itemRetiradaFindAllMustPass() {
 		Page<ItemRetirada> pageItemRetirada = null;
 		pageItemRetirada = this.itemRetiradaService.findAll(0, 1);
 		Assert.assertNotNull(pageItemRetirada);
-		System.out.println("QNT: " + pageItemRetirada.getTotalElements());
-		Assert.assertEquals(3, pageItemRetirada.getTotalElements());
+		Assert.assertEquals(1, pageItemRetirada.getTotalElements());
 	}
 	
-
+	@Sql(scripts = {
+			"/dataset/truncateItemRetirada.sql",
+			"/dataset/itemRetirada.sql",
+	})
+	@Test
+	public void findByIdItemRetirada() {
+		/*ATRIBUTOS	*/
+		ItemRetirada returnItemRetirada = null;
+		
+		/*CONSTRUCAO*/
+		returnItemRetirada = this.itemRetiradaService.findByIdItemRetirada(21);
+						
+		/*TESTE*/
+		Assert.assertNotNull(returnItemRetirada);
+		Assert.assertEquals(21, returnItemRetirada.getId());
+	}
 }

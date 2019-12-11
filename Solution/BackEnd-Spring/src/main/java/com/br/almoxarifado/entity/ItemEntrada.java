@@ -41,4 +41,6 @@ public class ItemEntrada {
 	joinColumns  = @JoinColumn(name ="entrada_id"),
 	inverseJoinColumns = @JoinColumn(name = "item_id"))
 	private List<Item> listItem;
+	
+	
 }

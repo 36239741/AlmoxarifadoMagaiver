@@ -25,8 +25,10 @@ public class ItemRetirada {
 	@Id
 	@GeneratedValue
 	private long id;
+	
+	@GeneratedValue
+	private long retirada_id;
 
-	private long retiradaId;
 	@NotNull(message = "Campo data nao foi preenchido")
 	private LocalDateTime data = LocalDateTime.now();
 	@NotNull(message = "Campo valor nao foi preenchido")
@@ -43,5 +45,7 @@ public class ItemRetirada {
 	inverseJoinColumns = @JoinColumn(name = "item_id"))
 	private List<Item> listItem;
 	
-	
+	public void listItemClear() {
+		this.listItem.clear();
+	}
 }

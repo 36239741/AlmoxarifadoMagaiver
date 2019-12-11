@@ -104,7 +104,7 @@ public class ItemService {
 	 */
 	public Item findByCodigo(String codigo) {
 		Item returnItem = this.repository.findByCodigo(codigo);
-		Assert.notNull(returnItem, "Codigo: "+codigo+" do item nao ecnotrado");
+		Assert.notNull(returnItem, "Codigo: "+codigo+" do item nao encontrado");
 		return returnItem;
 	}
 	
@@ -138,7 +138,12 @@ public class ItemService {
 	}
 
 
-	
+	public void atualizaEstoque(String codigo, String operacao, int quantidade) {
+		
+		if(operacao.equals("saida")) {
+			this.repository.retiraEstoque(codigo, quantidade);
+		}
+	}
 
 	
 
