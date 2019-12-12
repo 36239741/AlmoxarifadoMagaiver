@@ -1,0 +1,43 @@
+<div class="screen-container">
+  <form [formGroup]="form" fxLayout="row" fxLayoutGap="100px">
+    <mat-form-field fxFlex="1 1 30%">
+      <input
+        matInput
+        placeholder="Nome de quem esta retirando"
+        formControlName="quemRetirou"
+      />
+    </mat-form-field>
+    <mat-form-field fxFlex="1 1 30%">
+      <input
+        matInput
+        placeholder="Local da retirada"
+        formControlName="localRetirada"
+      />
+    </mat-form-field>
+  </form>
+  <h2>Lista da retirada</h2>
+  <app-table [columns]="columns" [data]="data" (removeList)="removeList($event)">
+    <ng-template tdDataTableTemplate="cancelar" let-value="value">
+      <mat-icon>cancel</mat-icon>
+    </ng-template>
+  </app-table>
+  <br/>
+  <br/>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="100px">
+    <div fxLayout="row" fxLayoutAlign="end" class="button-container">
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+        <button mat-flat-button color="primary" (click)="verificarItem()">
+          Retirar
+        </button>
+        <button
+        mat-flat-button
+        color="primary"
+        [routerLink]="['/item-retirada']"
+        fxLayoutAlign="center center"
+      >
+        <span>Cancelar</span>
+      </button>
+      </div>
+    </div>
+  </div>
+</div>

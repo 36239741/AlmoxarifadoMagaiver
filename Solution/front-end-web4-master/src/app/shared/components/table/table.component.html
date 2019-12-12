@@ -1,0 +1,25 @@
+<td-data-table
+  #dataTable
+  [data]="data"
+  [columns]="columns"
+  [clickable]="clicavel"
+  [selectable]="selectable"
+  (rowSelect)="rowSelect($event)"
+  (rowClick)="rowClickEvent($event)">
+  <ng-template tdDataTableTemplate="cancelar" let-value="value" let-row="row">
+      <a (click)="removeListEvent(row)" (click)="dataTable.refresh()"><mat-icon>cancel</mat-icon></a>
+
+  </ng-template>
+    <ng-template tdDataTableTemplate="detalhar" let-value="value" let-row="row">
+      <a (click)="detalharListEvent(row)"><mat-icon>assignment</mat-icon></a>
+  </ng-template>
+</td-data-table>
+<div
+class="md-padding"
+*ngIf="!dataTable.hasData"
+layout="row"
+layout-align="center center"
+>
+<h3>Nenhum resultado encontrado.</h3>
+</div>
+

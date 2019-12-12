@@ -1,0 +1,40 @@
+<div fxLayout="column" fxLayoutAlign="center start" >
+  <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 30%">
+    <mat-label><b>Número da retirada:</b></mat-label>
+    <span>{{ data['id'] }}</span>
+  </div>
+  <div fxLayout="row"  class="row2">
+    <div fxLayout="column" fxLayoutAlign="center center">
+        <mat-label><b>Data da retirada:</b></mat-label>
+        <span>{{ data['data'] }}</span>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 30%">
+        <mat-label><b>Quem retirou:</b></mat-label>
+        <span>{{ data.quemRetirou }}</span>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 30%">
+        <mat-label><b>Local da retirada:</b></mat-label>
+        <span>{{ data.localRetirada }}</span>
+    </div>
+  </div>
+  <div class="row3">
+    <h2>Lista da retirada</h2>
+    <app-table [columns]="columns" [data]="dataTable"></app-table>
+  </div>
+  <br/>
+  <br/>
+
+      <div fxLayout="column" fxLayoutAlign="center end">
+          <mat-label><b>Total da retirada:</b></mat-label>
+          <span>{{ totalRetirada | currency: 'BRL' }} </span>
+      </div>
+
+
+  <br/>
+  <br/>
+  <div fxLayout="row" fxLayoutAlign="center center" class="row4">
+    <div>
+        <button mat-flat-button color="primary" [routerLink]="['/item-retirada']" (click)="closeModal()">Ok</button>
+    </div>
+  </div>
+</div>

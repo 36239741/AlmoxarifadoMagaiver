@@ -1,0 +1,12 @@
+.button-container {
+    width: 100%;
+}
+.row1 {
+    margin-bottom: 25px;
+}
+.screen-container {
+    height: 100%;
+    position: relative;
+    background-color: #bdbebd;
+}
+

@@ -1,0 +1,60 @@
+<div fxLayout="column" fxLayoutAlign="center start">
+  <div>
+    <button
+      mat-flat-button
+      color="primary"
+      [routerLink]="['/item-retirada']"
+      fxLayoutAlign="center center"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      <span>Voltar</span>
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="100px" class="row2">
+    <div>
+      <app-search
+        placeHolder="Código"
+        (searchDebounce)="filterCodigoEvent($event)"
+      ></app-search>
+    </div>
+      <div>
+        <app-search
+          placeHolder="Descrição"
+          (searchDebounce)="filterDescricaoEvent($event)"
+        ></app-search>
+      </div>
+      <div>
+        <app-search
+          placeHolder="Local de armazenamento"
+          (searchDebounce)="filterLocalArmazenamentoEvent($event)"
+        ></app-search>
+      </div>
+    </div>
+    <div class="row3">
+      <app-table
+        [columns]="columns"
+        [data]="data"
+        [selectable]="selectable"
+        [totalPage]="totalPage"
+        [pageSize]="pageSize"
+        (rowSelectEvent)="rowSelect($event)"
+      ></app-table>
+      <td-paging-bar
+  #pagingBar
+  [pageSize]="pageSize"
+  [total]="totalPage"
+  (change)="pagingEvent($event)"
+>
+  {{ pagingBar.range }} of {{ pagingBar.total }}
+</td-paging-bar>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center" class="row4">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="adicionarItens()"
+      >
+        Adicionar a lista
+      </button>
+    </div>
+  </div>

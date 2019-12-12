@@ -1,0 +1,22 @@
+<div class="screen-container">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="100px" class="row1">
+            <app-search placeHolder="Número da retirada" (searchDebounce)="filterRetiradaId($event)"></app-search>
+            <app-search placeHolder="Nome" (searchDebounce)="filterNome($event)"></app-search>
+            <mat-form-field class="example-full-width" [formGroup]="formGroup">
+                <input matInput  type="date" formControlName="data" (blur)="filterData()">
+              </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="end" class="button-container">
+            <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+                    <button mat-flat-button color="primary" [routerLink]="['retirar-item']">Retirar item</button>
+            </div>
+        </div>
+ </div>
+ <app-table [columns]="tableColumns" [data]="data" (removeList)="openConfirm($event)" (detalharList)="openComponent($event)" [clicavel]="['true']"> </app-table>
+ <td-paging-bar
+ #pagingBar
+ [pageSize]="pageSize"
+ [total]="totalPage"
+ (change)="pagingEvent($event)"
+>
+ {{ pagingBar.range }} of {{ pagingBar.total }}
+</td-paging-bar>

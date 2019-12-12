@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+            <button mat-icon-button aria-label="Example icon-button with a heart icon">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>{{ title }}</span>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" class="button-sair">
+                <button mat-flat-button
+                color="primary" [routerLink]="['/home']">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Sair</span>
+                </button>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

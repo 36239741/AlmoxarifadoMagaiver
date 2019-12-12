@@ -1,0 +1,25 @@
+<div fxLayout="column" fxLayoutAlign="center start">
+  <div fxLayout="row" class="row2">
+      <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 2 20%">
+          <mat-label><b>Data da retirada:</b></mat-label>
+          <span>{{ localDate }}</span>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 20%">
+            <mat-label><b>Quem retirou:</b></mat-label>
+            <span>{{ itemRetirada.quemRetirou }}</span>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center" fxFlex="1 1 20%">
+              <mat-label><b>Local:</b></mat-label>
+              <span>{{ itemRetirada.localRetirada }}</span>
+          </div>
+  </div>
+  <div class="row2">
+      <app-table [columns]="columns" [data]="data"></app-table>
+  </div>
+  <br/>
+  <br/>
+  <div fxLayout="row" fxLayoutAlign="center center" class="row3" fxLayoutGap="20px">
+      <button mat-flat-button color="primary" (click)="save()">Concluir</button>
+      <button mat-flat-button color="primary" [routerLink]="['/item-retirada']">Cancelar</button>
+  </div>
+</div>
