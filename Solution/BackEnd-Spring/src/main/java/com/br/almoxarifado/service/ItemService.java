@@ -165,7 +165,12 @@ public class ItemService {
 
 			this.repository.save(returnItem);
 		}
+<<<<<<< HEAD
 		return itemSemEstoque;
+=======
+
+		return itemSemEstoque;		
+>>>>>>> 8e64d3d06171c92ef2afd527f879bc4e7ad7eaf8
 	}
 
 }

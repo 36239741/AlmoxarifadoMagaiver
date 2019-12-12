@@ -22,11 +22,6 @@ public class ItemEntradaService {
 		ItemEntrada returnItemEntrada = null;
 		
 		returnItemEntrada = this.repository.save(itemEntrada);
-		System.out.println("Item entrada:" + returnItemEntrada);
-		if(returnItemEntrada != null) {
-			this.itemService.atualizaEstoque("1234567", "entrada", returnItemEntrada.getQuantidade());
-		}
-		
 		return returnItemEntrada;
 	}
 	

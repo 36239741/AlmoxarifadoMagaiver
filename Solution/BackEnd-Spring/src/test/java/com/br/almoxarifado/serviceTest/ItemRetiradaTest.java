@@ -36,6 +36,7 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 			"/dataset/truncateItem.sql",
 			"/dataset/truncateItemRetirada.sql",
 			"/dataset/item.sql",
+			"/dataset/itemRetirada.sql",
 	})
 	@Test
 	public void itemRetiradaSaveMustPass() {
@@ -44,7 +45,7 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 		Item item =this.itemService.findByCodigo("1234567");
 		itemRetirada.getListItem().add(item);
 		itemRetirada.setLocalRetirada("Almoxarifado");
-		itemRetirada.setQuantidade(3);
+		itemRetirada.setQuantidade(10);
 		map = this.itemRetiradaService.retirada(itemRetirada);
 		ItemRetirada returnitemRetirada = null;
 		returnitemRetirada = (ItemRetirada) map.get("itemRetirada");
@@ -63,7 +64,7 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	@Test
 	public void itemRetiradaDeleteLogicoMustPassTestaODeleteLogico() {
 		this.itemRetiradaService.deleteLogico(21L);
-		final Integer quantidade = 43 ;
+		final Integer quantidade = 40 ;
 		ItemRetirada itemRetirada = this.itemRetiradaRepository.findById(21L);
 		Item item = this.itemRepository.findByCodigo("1234567");
 		Assert.assertNotNull(item);
@@ -75,7 +76,9 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	
 	
 	@Sql(scripts = {
+			"/dataset/truncateItem.sql",
 			"/dataset/truncateItemRetirada.sql",
+			"/dataset/item.sql",
 			"/dataset/itemRetirada.sql",
 	})
 	@Test
@@ -87,7 +90,9 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	}
 	
 	@Sql(scripts = {
+			"/dataset/truncateItem.sql",
 			"/dataset/truncateItemRetirada.sql",
+			"/dataset/item.sql",
 			"/dataset/itemRetirada.sql",
 	})
 	@Test
