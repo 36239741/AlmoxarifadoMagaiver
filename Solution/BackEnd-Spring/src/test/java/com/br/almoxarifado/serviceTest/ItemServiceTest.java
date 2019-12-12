@@ -117,7 +117,7 @@ public class ItemServiceTest extends AbstractIntegrationTest {
 	@Test
 	public void atualizarEstoqueMustPassAtualizandoOEstoqueDeUmItem() {
 		ItemRetirada itemRetirada = new ItemRetirada();
-		final Integer quantidade = 37;
+		final Integer quantidade = 0;
 		Item returnItem =null;  
 		Item item =this.ItemRepository.findByCodigo("1234567");
 		itemRetirada.getListItem().add(item);
@@ -230,7 +230,7 @@ public class ItemServiceTest extends AbstractIntegrationTest {
 			
 	/*TESTE*/
 	Assert.assertNotNull(page);
-	Assert.assertEquals(1,page.getTotalElements());
+	Assert.assertEquals(13,page.getTotalElements());
 	}
 	
 												/* FIND BY CODIGO */

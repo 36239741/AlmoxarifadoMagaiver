@@ -2,15 +2,14 @@ package com.br.almoxarifado.entity;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -39,11 +38,8 @@ public class ItemEntrada {
 	@NotBlank(message = "Campo Local Entrada nao foi preenchido")
 	private String localEntrada;
 	
-	@ManyToOne(targetEntity = Item.class,fetch = FetchType.EAGER)
-	@JoinTable(name = "tbl_item_entrada_list",
-	joinColumns  = @JoinColumn(name ="entrada_id"),
-	inverseJoinColumns = @JoinColumn(name = "item_id"))
-	private List<Item> listItem;
+	@OneToMany(targetEntity = Item.class,fetch = FetchType.EAGER)
+	private List<Item> listItem = new ArrayList();
 	
 	public void listItemClear() {
 		this.listItem.clear();

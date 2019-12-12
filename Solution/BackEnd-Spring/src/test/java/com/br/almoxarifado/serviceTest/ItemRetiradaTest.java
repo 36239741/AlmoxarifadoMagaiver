@@ -31,7 +31,7 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 	@Autowired
 	private ItemService itemService; 
 	
-	/*SALVA UMA RETIRADA*/
+												/*SALVA UMA RETIRADA*/
 	@Sql(scripts = {
 			"/dataset/truncateItem.sql",
 			"/dataset/truncateItemRetirada.sql",

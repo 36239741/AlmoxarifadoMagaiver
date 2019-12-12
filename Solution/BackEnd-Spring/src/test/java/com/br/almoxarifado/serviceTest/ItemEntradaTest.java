@@ -2,6 +2,7 @@ package com.br.almoxarifado.serviceTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemEntrada;
+import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.service.ItemEntradaService;
 import com.br.almoxarifado.service.ItemService;
 
@@ -21,28 +23,34 @@ public class ItemEntradaTest extends AbstractIntegrationTest {
 	@Autowired
 	private ItemService itemService;
 	
-	
+												/*SALVA UMA ENTRADA*/
 	@Sql(scripts = {
 			"/dataset/truncateItem.sql",
-			"/dataset/item.sql",
 			"/dataset/truncateItemEntrada.sql",
+			"/dataset/item.sql",
 			"/dataset/itemEntrada.sql",
 	})
 	@Test
 	public void itemEntradaSaveMustPass() {
 		ItemEntrada itemEntrada = new ItemEntrada();
-		ItemEntrada returnItemEntrada = null;
-		Item item =this.itemService.findByCodigo("1234567");
-		List<Item> listItem = new ArrayList<>();
-		listItem.add(item);
-		itemEntrada.setListItem(listItem);
+		Map<String, Object>  map = null;
+		
+		System.out.println("Linha 3 ------------- ");
+		
+		Item item = this.itemService.findByCodigo("1234567");
+		System.out.println("Item " + item);
+		itemEntrada.getListItem().add(item);
+		
 		itemEntrada.setLocalEntrada("Almoxarifado");
 		itemEntrada.setQuantidade(3);
 		itemEntrada.setValor(30.00);
 		
-		returnItemEntrada = this.itemEntradaService.entrada(itemEntrada);
+		map = this.itemEntradaService.entrada(itemEntrada);
+		ItemEntrada returnItemEntrada = null;
+		returnItemEntrada = (ItemEntrada) map.get("itemEntrada");
 		Assert.assertNotNull(returnItemEntrada);
-		Assert.assertEquals(3, itemEntrada.getQuantidade());
+		Assert.assertEquals(returnItemEntrada.getQuantidade(), itemEntrada.getQuantidade());
+		Assert.assertEquals(returnItemEntrada.getLocalEntrada(), itemEntrada.getLocalEntrada());
 		
 	}
 	

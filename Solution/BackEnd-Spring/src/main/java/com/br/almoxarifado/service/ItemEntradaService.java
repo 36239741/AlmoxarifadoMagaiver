@@ -1,5 +1,9 @@
 package com.br.almoxarifado.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemEntrada;
+import com.br.almoxarifado.entity.Servico;
 import com.br.almoxarifado.repository.ItemEntradaRepository;
 
 @Service
@@ -18,11 +24,20 @@ public class ItemEntradaService {
 	
 	private ItemService itemService;
 	
-	public ItemEntrada entrada(ItemEntrada itemEntrada) {
-		ItemEntrada returnItemEntrada = null;
-		
-		returnItemEntrada = this.repository.save(itemEntrada);
-		return returnItemEntrada;
+	public Map<String, Object> entrada(ItemEntrada itemEntrada) {
+		List<Item> returnItem = null;
+		Double valorTotalEntrada = 0.0;
+		Map<String, Object> map = new HashMap<>();
+		returnItem = this.itemService.atualizaEstoqueEntrada(itemEntrada, Servico.ENTRADA);
+		for (Item item : itemEntrada.getListItem()) {
+			valorTotalEntrada += item.getValor();
+		}
+		itemEntrada.setValor(valorTotalEntrada);
+		ItemEntrada returnItemEntrada = this.repository.save(itemEntrada);
+		if (returnItemEntrada != null) {
+			map.put("itemEntrada", returnItemEntrada);
+		}
+		return map;
 	}
 	
 	public Page<ItemEntrada> findAll(int page, int pageSize){
