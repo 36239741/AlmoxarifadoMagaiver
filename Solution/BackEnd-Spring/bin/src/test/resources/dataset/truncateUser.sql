@@ -1,1 +1,2 @@
-TRUNCATE tbl_user CASCADE;
+TRUNCATE usuario CASCADE;
+

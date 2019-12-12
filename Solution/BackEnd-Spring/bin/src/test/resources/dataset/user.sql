@@ -1,0 +1,1 @@
+INSERT INTO usuario (id, email, nome, senha, status_conta, user_status) VALUES (350 ,'josiasmegabit@hotmail.com', 'JOSIAS FONSECA', '123456', false, false);

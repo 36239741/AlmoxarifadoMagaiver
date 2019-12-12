@@ -1,6 +1,7 @@
 package com.br.almoxarifado.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,21 +19,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Usuario implements Serializable {
+@Getter()
+public class Usuario {
 	private static final long serialVersionUID = 1L;
 
 	@Id()
 	@GeneratedValue()
-	private Long id;
+	private long id;
 	
 	@NotBlank(message = "Nome em branco")
 	@Size(max = 40)

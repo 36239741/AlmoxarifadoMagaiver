@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.br.almoxarifado.entity.Item;
+import com.br.almoxarifado.entity.ItemEntrada;
 import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.entity.Servico;
 import com.br.almoxarifado.error.ExistingItemException;
@@ -165,9 +166,27 @@ public class ItemService {
 
 			this.repository.save(returnItem);
 		}
+<<<<<<< HEAD
 
 		return itemSemEstoque;	
 
-	}
+=======
+		return itemSemEstoque;
 
+>>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
+	}
+	
+	public List<Item> atualizaEstoqueEntrada(ItemEntrada itemEntrada, Servico servico) {
+		List<Item> itemSemEstoque = new ArrayList<Item>();
+		for (Item item : itemEntrada.getListItem()) {
+			Item returnItem = null;
+			returnItem = this.findByCodigo(item.getCodigo());
+			if(servico.equals(Servico.ENTRADA)) {
+				returnItem.setQuantidade(returnItem.getQuantidade() + item.getQuantidade());
+			}
+
+			this.repository.save(returnItem);
+		}
+		return itemSemEstoque;
+	}
 }
