@@ -89,9 +89,12 @@ public class ItemService {
 	 */
 	@Transactional(readOnly = true)
 	public Page<Item> findAllItem(int page, int size) {
-		Page<Item> pageItens;
+		Page<Item> pageItens = null;
 		PageRequest pageable = PageRequest.of(page, size);
 		pageItens = this.repository.findAll(pageable);
+		pageItens.getContent().forEach(item -> {
+			item.getFornecedor().getItem().clear();
+		});
 		return pageItens;
 	}
 
@@ -151,7 +154,7 @@ public class ItemService {
 			returnItem = this.findByCodigo(item.getCodigo());
 			if(servico.equals(Servico.RETIRADA)) {
 				if (returnItem.getQuantidade() > itemRetirada.getQuantidade()) {
-					returnItem.setQuantidade(returnItem.getQuantidade() - itemRetirada.getQuantidade());
+					returnItem.setQuantidade(returnItem.getQuantidade() - item.getQuantidade());
 				} else {
 					itemSemEstoque.add(item);
 				}
@@ -162,14 +165,7 @@ public class ItemService {
 
 			this.repository.save(returnItem);
 		}
-<<<<<<< HEAD
 		return itemSemEstoque;
-=======
-		else if(operacao.equals("entrada")) {
-			this.repository.entradaEstoque(codigo, quantidade);
-		}
->>>>>>> 381fa39dc774f3b11bceaf01385d822ecbda26c0
-		
 	}
 
 }

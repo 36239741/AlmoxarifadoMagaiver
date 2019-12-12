@@ -31,7 +31,7 @@ public class ItemRetirada {
 	private LocalDateTime data = LocalDateTime.now();
 	@NotNull(message = "Campo valor nao foi preenchido")
 	private Double valor;
-	@NotNull(message = "Campo quantidade nao foi preenchido")
+	
 	private int quantidade;
 	
 	@NotBlank(message = "Campo Local Retirada nao foi preenchido")

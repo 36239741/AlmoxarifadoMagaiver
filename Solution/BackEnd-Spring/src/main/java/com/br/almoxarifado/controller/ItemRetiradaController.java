@@ -1,5 +1,8 @@
 package com.br.almoxarifado.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.service.ItemRetiradaService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -69,7 +73,16 @@ public class ItemRetiradaController {
 	}
 	
 	@PostMapping(path = "/retirar")
-	public void saveItemRetirada(@RequestBody ItemRetirada itemRetirada) {
-		System.out.print(itemRetirada);
+	public void saveItemRetirada(@RequestBody Map<String , Object> itemRetirada) {
+		ItemRetirada objectItemRetirada = new ItemRetirada();
+		ObjectMapper object =new ObjectMapper();
+		List<Item> listItem = (List<Item>) itemRetirada.get("listItem"); 
+		for(int i =0; i < listItem.size(); i++) {
+			objectItemRetirada.getListItem().add(object.convertValue(listItem.get(i), Item.class));
+		}
+		objectItemRetirada.setLocalRetirada(itemRetirada.get("locaRetirada").toString());
+		objectItemRetirada.setQuemRetirou(itemRetirada.get("quemRetirou").toString());
+		this.service.retirada(objectItemRetirada);
+		
 	}
 }
