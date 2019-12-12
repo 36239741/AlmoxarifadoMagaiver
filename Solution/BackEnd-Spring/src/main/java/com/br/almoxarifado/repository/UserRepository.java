@@ -1,5 +1,8 @@
+
+
 package com.br.almoxarifado.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,17 +14,20 @@ import com.br.almoxarifado.entity.Usuario;
 
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, Long> {
+	
+	@EntityGraph(attributePaths = {"email"})
+	Usuario findByemailIgnoreCase (String email);
 	@Query(value = "SELECT * FROM usuario WHERE email ILIKE ?1",nativeQuery = true)
 	Usuario findByEmail (String email);
 	@Modifying
-	@Query(value = "UPDATE Usuario user SET user.userStatus = 'true' WHERE user.id = ?1")
-	void userActive(Long id);
+	@Query(value = "UPDATE usuario SET user_status = 'true' WHERE id = ?1", nativeQuery = true)
+	void userActive(long id);
 	@Modifying
-	@Query(value = "UPDATE Usuario user SET user.userStatus = 'false',user.statusConta = 'false' WHERE user.id = ?1")
-	void userDesative(Long id);
+	@Query(value = "UPDATE usuario SET user_status = 'false' WHERE id = ?1", nativeQuery = true)
+	void userDesative(long id);
 	@Modifying
 	@Query(value = "UPDATE Usuario user SET user.statusConta = 'true' WHERE user.id = ?1")
-	void userActiveAccount(Long id);
+	void userActiveAccount(long id);
 	@Modifying
 	@Query(value = "UPDATE Usuario user SET user.senha = ?1 WHERE user_id = ?2")
 	Integer userChangePassword(String senha,String email);

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,9 +63,16 @@ public class ItemRetiradaService {
 		return map;
 	}
 
-	public Page<ItemRetirada> findAll(int page, int pageSize) {
+	public Page<ItemRetirada> findAllItemRetirada(int page, int pageSize) {
 		PageRequest pageRequest = PageRequest.of(page, pageSize);
-		return this.repository.findAllItemRetirada(pageRequest);
+		return new PageImpl<>(this.repository.findAllItemRetirada(), pageRequest, pageSize);
+	}
+	
+	public Page<ItemRetirada> findAFilters(int page, int pageSize, Long retiradaId, String quemRetirou) {
+		PageRequest pageRequest = PageRequest.of(page, pageSize);
+		
+
+		return this.repository.findByFilters(retiradaId,quemRetirou, pageRequest);
 	}
 
 	/*

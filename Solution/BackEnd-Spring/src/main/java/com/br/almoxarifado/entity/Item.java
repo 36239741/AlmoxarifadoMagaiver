@@ -44,6 +44,8 @@ public class Item   {
 	@NotNull(message = "Nenhum valor inserido")
 	private Double valor;
 	
+	private Integer quantidadeRetirada;
+	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false,targetEntity = Fornecedor.class)
 	private Fornecedor fornecedor;
 	

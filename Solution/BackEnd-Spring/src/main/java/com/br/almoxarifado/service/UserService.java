@@ -15,7 +15,7 @@ import com.br.almoxarifado.entity.Usuario;
 import com.br.almoxarifado.repository.UserRepository;
 
 @Service
-@Transient
+@Transactional
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;

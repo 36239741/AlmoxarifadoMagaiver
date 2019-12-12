@@ -2,6 +2,7 @@ package com.br.almoxarifado.entity;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class ItemEntrada {
 	@GeneratedValue
 	private long entradaId;
 	@NotNull(message = "Campo data nao foi preenchido")
-	private LocalDateTime data = LocalDateTime.now();
+	private String data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 	@NotNull(message = "Campo valor nao foi preenchido")
 	private Double valor;
 	@NotNull(message = "Campo quantidade nao foi preenchido")

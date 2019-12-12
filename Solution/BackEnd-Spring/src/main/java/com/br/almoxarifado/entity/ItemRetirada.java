@@ -1,6 +1,7 @@
 package com.br.almoxarifado.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,7 +27,7 @@ public class ItemRetirada {
 	private long id;
 
 	@NotNull(message = "Campo data nao foi preenchido")
-	private LocalDateTime data = LocalDateTime.now();
+	private String data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 	@NotNull(message = "Campo valor nao foi preenchido")
 	private Double valor;
 	

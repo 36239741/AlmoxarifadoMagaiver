@@ -25,14 +25,12 @@ public class ItemEntradaTest extends AbstractIntegrationTest {
 	@Sql(scripts = {
 			"/dataset/truncateItem.sql",
 			"/dataset/item.sql",
-			"/dataset/truncateItemEntrada.sql",
-			"/dataset/itemEntrada.sql",
 	})
 	@Test
 	public void itemEntradaSaveMustPass() {
 		ItemEntrada itemEntrada = new ItemEntrada();
 		ItemEntrada returnItemEntrada = null;
-		Item item =this.itemService.findByCodigo("1234567");
+		Item item = this.itemService.findByCodigo("1234567");
 		List<Item> listItem = new ArrayList<>();
 		listItem.add(item);
 		itemEntrada.setListItem(listItem);

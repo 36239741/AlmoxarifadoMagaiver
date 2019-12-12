@@ -230,7 +230,7 @@ public class ItemServiceTest extends AbstractIntegrationTest {
 			
 	/*TESTE*/
 	Assert.assertNotNull(page);
-	Assert.assertEquals(1,page.getTotalElements());
+	Assert.assertEquals(13,page.getTotalElements());
 	}
 	
 												/* FIND BY CODIGO */

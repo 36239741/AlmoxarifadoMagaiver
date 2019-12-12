@@ -1,5 +1,6 @@
 package com.br.almoxarifado.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import net.bytebuddy.asm.Advice.Local;
 
 @RestController()
 @RequestMapping(path = "v1/item_retirada")
@@ -68,8 +71,22 @@ public class ItemRetiradaController {
 	public ResponseEntity<Page<ItemRetirada>> findAll(@RequestParam(value = "page", required = true) Integer page,
 			@RequestParam(value = "size", required = true) Integer size) {
 		Page<ItemRetirada> pageItemRetirada = null;
-		pageItemRetirada = this.service.findAll(page, size);
+		pageItemRetirada = this.service.findAllItemRetirada(page, size);
 		return new ResponseEntity<>(pageItemRetirada, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/filters")
+	public ResponseEntity<Page<ItemRetirada>> findFilters(@RequestParam(value = "page", required = true) int page,
+			@RequestParam(value = "size", required = true) int size, @RequestParam(value = "quemRetirou", required = true) String quemRetirou,
+			@RequestParam(value = "data", required = true) String date, @RequestParam(value = "retiradaId", required = true) Long retiradaId) {
+		Page<ItemRetirada> pageItemRetirada = null;
+		pageItemRetirada =  this.service.findAFilters(page, size,retiradaId, quemRetirou);
+		return new ResponseEntity<>(pageItemRetirada, HttpStatus.OK);
+	}
+	
+	@DeleteMapping 
+	public void delete(@RequestParam(name = "itemRetiradaId") String itemRetiradaId) {
+		this.service.deleteLogico(Long.parseLong(itemRetiradaId));
 	}
 	
 	@PostMapping(path = "/retirar")
@@ -80,7 +97,7 @@ public class ItemRetiradaController {
 		for(int i =0; i < listItem.size(); i++) {
 			objectItemRetirada.getListItem().add(object.convertValue(listItem.get(i), Item.class));
 		}
-		objectItemRetirada.setLocalRetirada(itemRetirada.get("locaRetirada").toString());
+		objectItemRetirada.setLocalRetirada(itemRetirada.get("localRetirada").toString());
 		objectItemRetirada.setQuemRetirou(itemRetirada.get("quemRetirou").toString());
 		this.service.retirada(objectItemRetirada);
 		

@@ -1,5 +1,5 @@
 INSERT INTO fornecedor(id, bairro, cep, cidade, email, estado, fornecedores_status,longadouro, nome, numero, pais) VALUES (100, 'teste', '13213', 'teste','henrique_nitatori@hotmail.com','SP', true,'teste', 'teste', 123, 'BR');
-INSERT INTO item(id,descricao,codigo,item_status,local_armazenamento,quantidade,valor,fornecedor_id) VALUES(100,'Martelo','1234567',true,'Loja1', 40,40, 100);
+INSERT INTO item(id,descricao,codigo,item_status,local_armazenamento,quantidade,valor,fornecedor_id,quantidade_retirada) VALUES(100,'Martelo','1234567',true,'Loja1', 40,40, 100,3);
 INSERT INTO item(id,descricao,codigo,item_status,local_armazenamento,quantidade,valor,fornecedor_id) VALUES(101,'Bola','324234',true,'Loja1', 40,40, 100);
 INSERT INTO item(id,descricao,codigo,item_status,local_armazenamento,quantidade,valor,fornecedor_id) VALUES(102,'Martelo','123123',true,'Loja1', 40,40, 100);
 INSERT INTO item(id,descricao,codigo,item_status,local_armazenamento,quantidade,valor,fornecedor_id) VALUES(103,'Relogio','342432',true,'Loja1', 40,40, 100);

@@ -88,7 +88,7 @@ public class UserServiceTest extends AbstractIntegrationTest{
 		/*TESTE*/
 		Assert.assertNotNull(usuario);
 		Assert.assertEquals(false, usuario.isStatusConta());
-		Assert.assertEquals(false, usuario.isUserStatus());
+		Assert.assertEquals(true, usuario.isUserStatus());
 	}
 	
 	

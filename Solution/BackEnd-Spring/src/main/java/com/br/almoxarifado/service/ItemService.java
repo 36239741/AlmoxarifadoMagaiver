@@ -160,17 +160,14 @@ public class ItemService {
 				}
 			}
 			else {		
-					returnItem.setQuantidade(returnItem.getQuantidade() + itemRetirada.getQuantidade());
+					returnItem.setQuantidade(returnItem.getQuantidade() + item.getQuantidade());
 			}
 
 			this.repository.save(returnItem);
 		}
-<<<<<<< HEAD
-		return itemSemEstoque;
-=======
 
-		return itemSemEstoque;		
->>>>>>> 8e64d3d06171c92ef2afd527f879bc4e7ad7eaf8
+		return itemSemEstoque;	
+
 	}
 
 }
