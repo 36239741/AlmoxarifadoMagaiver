@@ -40,7 +40,17 @@ public class UserServiceTest extends AbstractIntegrationTest{
 		Assert.assertNotNull(user);
 		Assert.assertEquals("henrique",reuturnUser.getNome());
 	}
+							/* Alterar Usuario */
+	@Test
+	public void userServiceSaveMustPassAlterandoUmUsuario() {
+		Usuario user = new Usuario();	
+		Usuario reuturnUser = null;	
+		
+		user = this.userService.findUserByEmail("josiasmegabit@hotmail.com");
+		System.out.println(user);
+				
 	
+	}
 							/* TESTE DE BUSCAR TODOS OS USUÁRIOS */
 	@Test
 	public void UserFindAllMustPassBuscandoTodosUsuarios() {
@@ -86,9 +96,8 @@ public class UserServiceTest extends AbstractIntegrationTest{
 		usuario = this.userService.findUserByEmail("josiasmegabit@hotmail.com");
 									
 		/*TESTE*/
-		Assert.assertNotNull(usuario);
-		Assert.assertEquals(false, usuario.isStatusConta());
-		Assert.assertEquals(false, usuario.isUserStatus());
+		Assert.assertEquals(true, usuario.isUserStatus());
+		
 	}
 	
 	

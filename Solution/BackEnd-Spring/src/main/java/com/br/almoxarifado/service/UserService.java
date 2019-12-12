@@ -79,10 +79,9 @@ public class UserService {
 		Usuario users = null;
 		Boolean returnStatus = null;
 		users = this.findUserByEmail(email);
-		
 		if (users != null) {
-
-			if (users.isStatusConta()) {
+			
+			if (users.isUserStatus()) {
 				 this.userRepository.userDesative(users.getId());
 				 returnStatus = false;
 			} 

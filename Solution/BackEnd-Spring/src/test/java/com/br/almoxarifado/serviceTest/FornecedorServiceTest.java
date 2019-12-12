@@ -62,6 +62,7 @@ public class FornecedorServiceTest extends AbstractIntegrationTest {
 		fornecedor.setNumero(875);
 		fornecedor.setPais("BR");
 		fornecedor.setTelefone(list);
+		fornecedor.setFornecedorStatus(true);
 		returnFornecedor = this.fornecedorService.saveFornecedor(fornecedor);
 		
 		/*TESTE*/
@@ -114,8 +115,8 @@ public class FornecedorServiceTest extends AbstractIntegrationTest {
 		Fornecedor returnFornecedor = null;
 		
 		/*CONSTRUCAO*/
-		this.fornecedorService.desativarOrAtivarFornecedor("Teste");
-		returnFornecedor = this.fornecedorService.findByNomeFornecedor("Teste");
+		this.fornecedorService.desativarOrAtivarFornecedor("teste");
+		returnFornecedor = this.fornecedorService.findByNomeFornecedor("teste");
 									
 		/*TESTE*/
 		Assert.assertNotNull(returnFornecedor);
