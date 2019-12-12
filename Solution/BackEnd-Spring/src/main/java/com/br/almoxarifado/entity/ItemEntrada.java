@@ -38,6 +38,8 @@ public class ItemEntrada {
 	@NotBlank(message = "Campo Local Entrada nao foi preenchido")
 	private String localEntrada;
 	
+	private Boolean entradaStatus = true;
+	
 	@OneToMany(targetEntity = Item.class,fetch = FetchType.EAGER)
 	private List<Item> listItem = new ArrayList();
 	

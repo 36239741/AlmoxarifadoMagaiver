@@ -54,7 +54,7 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 		Assert.assertEquals(returnitemRetirada.getLocalRetirada(), itemRetirada.getLocalRetirada());
 		
 	}
-	/*TESTA O DELETE LOGICO DO ITEM RETIRADA*/
+								/*TESTA O DELETE LOGICO DO ITEM RETIRADA*/
 	@Sql(scripts = {
 			"/dataset/truncateItem.sql",
 			"/dataset/truncateItemRetirada.sql",

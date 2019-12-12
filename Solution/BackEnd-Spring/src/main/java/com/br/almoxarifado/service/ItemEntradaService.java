@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemEntrada;
+import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.entity.Servico;
 import com.br.almoxarifado.repository.ItemEntradaRepository;
 
@@ -69,5 +70,18 @@ public class ItemEntradaService {
 		pageItemEntrada = this.repository.findAll(pageable);
 		pageItemEntrada.getContent().forEach(data -> data.listItemClear());
 		return pageItemEntrada;
+	}
+	
+	/*
+	 * Servico que faz um delete logico na entidade ItemEntrada
+	 * 
+	 * @Param itemEntradaId Long - recebe o id da entrada
+	 * 
+	 * @return void
+	 */
+	public void deleteLogico(Long itemEntradaId) {
+		ItemEntrada itemEntrada = this.repository.findById(itemEntradaId).get();
+		this.itemService.atualizaEstoqueEntrada(itemEntrada, Servico.ENTRADA);
+		this.repository.deleteLogico(itemEntradaId);
 	}
 }
