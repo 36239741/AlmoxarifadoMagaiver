@@ -166,27 +166,22 @@ public class ItemService {
 
 			this.repository.save(returnItem);
 		}
-<<<<<<< HEAD
-
 		return itemSemEstoque;	
 
-=======
-		return itemSemEstoque;
-
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
 	}
 	
-	public List<Item> atualizaEstoqueEntrada(ItemEntrada itemEntrada, Servico servico) {
-		List<Item> itemSemEstoque = new ArrayList<Item>();
+	public void atualizaEstoqueEntrada(ItemEntrada itemEntrada, Servico servico) {
+		System.out.println(itemEntrada);
 		for (Item item : itemEntrada.getListItem()) {
 			Item returnItem = null;
 			returnItem = this.findByCodigo(item.getCodigo());
+			System.out.println("Serviço: " + servico);
 			if(servico.equals(Servico.ENTRADA)) {
 				returnItem.setQuantidade(returnItem.getQuantidade() + item.getQuantidade());
 			}
 
 			this.repository.save(returnItem);
 		}
-		return itemSemEstoque;
+		
 	}
 }

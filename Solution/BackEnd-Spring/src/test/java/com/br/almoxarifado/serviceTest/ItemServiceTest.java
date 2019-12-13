@@ -15,6 +15,7 @@ import org.springframework.transaction.TransactionSystemException;
 
 import com.br.almoxarifado.entity.Fornecedor;
 import com.br.almoxarifado.entity.Item;
+import com.br.almoxarifado.entity.ItemEntrada;
 import com.br.almoxarifado.entity.ItemRetirada;
 import com.br.almoxarifado.entity.Servico;
 import com.br.almoxarifado.entity.Telefone;
@@ -345,26 +346,25 @@ public class ItemServiceTest extends AbstractIntegrationTest {
 		@Test(expected = TransactionSystemException.class)
 		public void testSaveItemMustFail3() {
 		
-		/* ATRIBUTOS */
-		Fornecedor fornecedor = null;
-		Item item = new Item();
-		Item returnItem = null;
-		
-		/*CONSTRUCAO*/
-		fornecedor = this.fornecedorRepository.findByNomeIgnoreCase("teste");
-		item.setDescricao("Switch 2960");
-		item.setFornecedor(fornecedor);
-		item.setLocalArmazenamento("Shumodramo");
-		item.setQuantidade(null);
-		item.setValor(7000.00);
-		returnItem = this.service.saveItem(item);
-		
-		/*TESTE*/
-		Assert.assertNotNull(returnItem);
-		Assert.assertEquals("Switch 2960X", returnItem.getDescricao());
-		Assert.assertEquals("Shumodramo", returnItem.getLocalArmazenamento());
-		
+			/* ATRIBUTOS */
+			Fornecedor fornecedor = null;
+			Item item = new Item();
+			Item returnItem = null;
+			
+			/*CONSTRUCAO*/
+			fornecedor = this.fornecedorRepository.findByNomeIgnoreCase("teste");
+			item.setDescricao("Switch 2960");
+			item.setFornecedor(fornecedor);
+			item.setLocalArmazenamento("Shumodramo");
+			item.setQuantidade(null);
+			item.setValor(7000.00);
+			returnItem = this.service.saveItem(item);
+			
+			/*TESTE*/
+			Assert.assertNotNull(returnItem);
+			Assert.assertEquals("Switch 2960X", returnItem.getDescricao());
+			Assert.assertEquals("Shumodramo", returnItem.getLocalArmazenamento());
+			
 		}
 	
-
 }

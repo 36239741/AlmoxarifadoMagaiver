@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
+import javax.transaction.Transaction;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.TransactionSystemException;
 
 import com.br.almoxarifado.entity.Item;
 import com.br.almoxarifado.entity.ItemRetirada;
@@ -107,4 +111,65 @@ public class ItemRetiradaTest extends AbstractIntegrationTest{
 		Assert.assertNotNull(returnItemRetirada);
 		Assert.assertEquals(21, returnItemRetirada.getId());
 	}
-}
+	
+						/* MUST FAIL*/
+	
+					/*SALVA UMA RETIRADA*/
+		@Sql(scripts = {
+		"/dataset/truncateItem.sql",
+		"/dataset/truncateItemRetirada.sql",
+		"/dataset/item.sql",
+		"/dataset/itemRetirada.sql",
+		})
+		@Test(expected = TransactionSystemException.class)
+		public void itemRetiradaSaveMustFail() {
+			ItemRetirada itemRetirada = new ItemRetirada();
+			Map<String, Object>  map = null;
+			Item item =this.itemService.findByCodigo("1234567");
+			itemRetirada.getListItem().add(item);
+			map = this.itemRetiradaService.retirada(itemRetirada);
+			ItemRetirada returnitemRetirada = null;
+			returnitemRetirada = (ItemRetirada) map.get("itemRetirada");
+
+		}
+		
+				/*TESTA O DELETE LOGICO DO ITEM RETIRADA MUST FAIL*/
+		@Sql(scripts = {
+		"/dataset/truncateItem.sql",
+		"/dataset/truncateItemRetirada.sql",
+		"/dataset/item.sql",
+		"/dataset/itemRetirada.sql",
+		})
+		@Test(expected = NoSuchElementException.class)
+		public void itemRetiradaDeleteLogicoMustFailTestaODeleteLogico() {
+			this.itemRetiradaService.deleteLogico(60L);
+			final Integer quantidade = 40 ;
+			ItemRetirada itemRetirada = this.itemRetiradaRepository.findById(60L);
+			Item item = this.itemRepository.findByCodigo("1234567");
+			Assert.assertNotNull(item);
+			Assert.assertNotNull(itemRetirada);
+			Assert.assertEquals(Boolean.FALSE, itemRetirada.getRetiradaStatus());
+			Assert.assertEquals(quantidade, item.getQuantidade());
+
+		}
+		
+								/* Buscando item inexistente Must Fail*/
+		@Sql(scripts = {
+				"/dataset/truncateItem.sql",
+				"/dataset/truncateItemRetirada.sql",
+				"/dataset/item.sql",
+				"/dataset/itemRetirada.sql",
+		})
+		@Test(expected = IllegalArgumentException.class)
+		public void findByIdItemRetiradaMustFail() {
+			/*ATRIBUTOS	*/
+			ItemRetirada returnItemRetirada = null;
+			
+			/*CONSTRUCAO*/
+			returnItemRetirada = this.itemRetiradaService.findByIdItemRetirada(78);
+							
+			/*TESTE*/
+			Assert.assertNotNull(returnItemRetirada);
+			Assert.assertEquals(21, returnItemRetirada.getId());
+		}
+	}

@@ -34,47 +34,7 @@ public class ItemEntradaTest extends AbstractIntegrationTest {
 	
 	
 	
-												/*SALVA UMA ENTRADA*/
-	@Sql(scripts = {
-			"/dataset/truncateItem.sql",
-<<<<<<< HEAD
-			"/dataset/item.sql",
-=======
-			"/dataset/truncateItemEntrada.sql",
-			"/dataset/item.sql",
-			"/dataset/itemEntrada.sql",
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
-	})
-	@Test
-	public void itemEntradaSaveMustPass() {
-		ItemEntrada itemEntrada = new ItemEntrada();
-<<<<<<< HEAD
-		ItemEntrada returnItemEntrada = null;
-		Item item = this.itemService.findByCodigo("1234567");
-		List<Item> listItem = new ArrayList<>();
-		listItem.add(item);
-		itemEntrada.setListItem(listItem);
-=======
-		Map<String, Object>  map = null;
-	
-		Item item = this.itemService.findByCodigo("1234567");
-	
-		itemEntrada.getListItem().add(item);
-		
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
-		itemEntrada.setLocalEntrada("Almoxarifado");
-		itemEntrada.setQuantidade(5);
-		itemEntrada.setValor(30.00);
-		
-		map = this.itemEntradaService.entrada(itemEntrada);
-		ItemEntrada returnItemEntrada = null;
-		returnItemEntrada = (ItemEntrada) map.get("itemEntrada");
-		Assert.assertNotNull(returnItemEntrada);
-		Assert.assertEquals(returnItemEntrada.getQuantidade(), itemEntrada.getQuantidade());
-		Assert.assertEquals(returnItemEntrada.getLocalEntrada(), itemEntrada.getLocalEntrada());
-		
-	}
-	
+												
 	@Sql(scripts = {
 			"/dataset/truncateItemEntrada.sql",
 			"/dataset/itemEntrada.sql",
@@ -125,5 +85,74 @@ public class ItemEntradaTest extends AbstractIntegrationTest {
 		Assert.assertEquals(quantidade, item.getQuantidade());
 
 	}
+
+							/*    MUST FAIL*/
+	
+	/*SALVA UMA ENTRADA*/
+	@Sql(scripts = {
+			"/dataset/truncateItem.sql",
+			"/dataset/item.sql",
+			"/dataset/truncateItemEntrada.sql",
+			"/dataset/itemEntrada.sql",
+	})
+	@Test
+	public void itemEntradaSaveMustFail() {
+		ItemEntrada itemEntrada = new ItemEntrada();
+		ItemEntrada returnItemEntrada = null;
+		Item item = this.itemService.findByCodigo("1234567");
+		List<Item> listItem = new ArrayList<>();
+		listItem.add(item);
+		itemEntrada.setListItem(listItem);
+		Map<String, Object>  map = null;
+	
+		itemEntrada.getListItem().add(item);
+		
+		itemEntrada.setLocalEntrada("Almoxarifado");
+		itemEntrada.setValor(30.00);
+		
+		map = this.itemEntradaService.entrada(itemEntrada);
+		
+		returnItemEntrada = (ItemEntrada) map.get("itemEntrada");
+		Assert.assertNotNull(returnItemEntrada);
+		Assert.assertNotNull(itemEntrada.getQuantidade());
+	}
+	
+					/* MUST FAIL*/
+					/* Busca por Item Entrada Inexistente*/
+	@Sql(scripts = {
+			"/dataset/truncateItemEntrada.sql",
+			"/dataset/itemEntrada.sql",
+	})
+	@Test(expected = IllegalArgumentException.class)
+	public void findByIdItemEntradaMustFail() {
+
+		ItemEntrada returnItemEntrada = null;
+		
+		returnItemEntrada = this.itemEntradaService.findByIdItemEntrada(80);
+						
+		System.out.println(returnItemEntrada);
+		Assert.assertNotNull(returnItemEntrada);
+		Assert.assertEquals(21, returnItemEntrada.getId());
+	}
+	
+					/*TESTA O DELETE LOGICO DO ITEM Entrada*/
+	@Sql(scripts = {
+	"/dataset/truncateItem.sql",
+	"/dataset/truncateItemEntrada.sql",
+	"/dataset/item.sql",
+	"/dataset/itemEntrada.sql",
+	})
+	@Test
+	public void itemEntradaDeleteLogicoMustFailTestaODeleteLogico() {
+		this.itemEntradaService.deleteLogico(21L);
+		final Integer quantidade = 40 ;
+		ItemEntrada itemEntrada = this.itemEntradaRepository.findById(195);
+		System.out.println("Item Entrada: " + itemEntrada);
+		Item item = this.itemRepository.findByCodigo("1234567");
+		System.out.println("Item : " + item.getQuantidade());
+
+	}
+	
+	
 
 }

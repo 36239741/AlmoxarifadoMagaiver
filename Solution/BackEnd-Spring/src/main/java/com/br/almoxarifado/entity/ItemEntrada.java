@@ -2,11 +2,8 @@ package com.br.almoxarifado.entity;
 
 
 import java.time.LocalDateTime;
-<<<<<<< HEAD
 import java.time.format.DateTimeFormatter;
-=======
 import java.util.ArrayList;
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -30,8 +27,6 @@ public class ItemEntrada {
 	@GeneratedValue
 	private long id;
 	
-	@GeneratedValue
-	private long entradaId;
 	@NotNull(message = "Campo data nao foi preenchido")
 	private String data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 	@NotNull(message = "Campo valor nao foi preenchido")

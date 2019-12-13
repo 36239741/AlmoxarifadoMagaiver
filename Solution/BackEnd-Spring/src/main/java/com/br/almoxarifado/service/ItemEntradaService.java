@@ -22,14 +22,15 @@ import com.br.almoxarifado.repository.ItemEntradaRepository;
 public class ItemEntradaService {
 	@Autowired
 	private ItemEntradaRepository repository;
-	
+	@Autowired
 	private ItemService itemService;
 	
 	public Map<String, Object> entrada(ItemEntrada itemEntrada) {
 		List<Item> returnItem = null;
 		Double valorTotalEntrada = 0.0;
 		Map<String, Object> map = new HashMap<>();
-		returnItem = this.itemService.atualizaEstoqueEntrada(itemEntrada, Servico.ENTRADA);
+		
+		this.itemService.atualizaEstoqueEntrada(itemEntrada, Servico.ENTRADA);
 		for (Item item : itemEntrada.getListItem()) {
 			valorTotalEntrada += item.getValor();
 		}

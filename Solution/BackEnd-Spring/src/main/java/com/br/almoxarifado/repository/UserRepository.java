@@ -21,17 +21,11 @@ public interface UserRepository extends JpaRepository<Usuario, Long> {
 	@Query(value = "SELECT * FROM usuario WHERE email ILIKE ?1",nativeQuery = true)
 	Usuario findByEmail (String email);
 	@Modifying
-<<<<<<< HEAD
-	@Query(value = "UPDATE usuario SET user_status = 'true' WHERE id = ?1", nativeQuery = true)
-	void userActive(long id);
-	@Modifying
-=======
 	@Transactional
 	@Query(value = "UPDATE usuario SET user_status = 'true' WHERE id = ?1", nativeQuery = true)
 	void userActive(long id);
 	@Modifying
 	@Transactional
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
 	@Query(value = "UPDATE usuario SET user_status = 'false' WHERE id = ?1", nativeQuery = true)
 	void userDesative(long id);
 	@Modifying

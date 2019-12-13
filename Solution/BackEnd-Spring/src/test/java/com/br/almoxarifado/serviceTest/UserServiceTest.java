@@ -96,14 +96,10 @@ public class UserServiceTest extends AbstractIntegrationTest{
 		usuario = this.userService.findUserByEmail("josiasmegabit@hotmail.com");
 									
 		/*TESTE*/
-<<<<<<< HEAD
 		Assert.assertNotNull(usuario);
 		Assert.assertEquals(false, usuario.isStatusConta());
 		Assert.assertEquals(true, usuario.isUserStatus());
-=======
-		Assert.assertEquals(true, usuario.isUserStatus());
 		
->>>>>>> b41dcedf7b27041a6f5e13e76f5359ef47d5bb9c
 	}
 	
 	

@@ -1,1 +1,1 @@
-INSERT INTO item_entrada (id, data, local_entrada, quantidade, entrada_id, valor) VALUES (21, NOW(), 'Loja 1', 3, 100, 55.50)
+INSERT INTO item_entrada (id, data, local_entrada, quantidade, valor, entrada_status) VALUES (21, NOW(), 'Loja 1', 3, 55.50, true)

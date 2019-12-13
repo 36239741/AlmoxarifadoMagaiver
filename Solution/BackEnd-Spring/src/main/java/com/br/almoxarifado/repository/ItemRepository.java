@@ -18,7 +18,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@Query(value = "SELECT * FROM item WHERE local_armazenamento ILIKE ?1",nativeQuery = true)
 	Item findByLocalArmazenamento (String localArmazenamento);
 	
-	@EntityGraph(attributePaths = "fornecedor")
+	@EntityGraph(attributePaths = "fornecedor.item")
 	Item findByCodigo (String codigo);
 	
 	@Query("FROM Item item "
